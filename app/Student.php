@@ -43,7 +43,7 @@ class Student extends Authenticatable implements JWTSubject, MustVerifyEmail
     ];
 
     /**
-     * The relationships for this model
+     * The relationships for this model.
      */
     public function leaded_project()
     {
