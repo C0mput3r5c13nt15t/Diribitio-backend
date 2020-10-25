@@ -45,7 +45,6 @@ class EMailVerificationController extends Controller
         $request->user('leaders')->sendEmailVerificationNotification();
 
         return response()->json(['message' => 'Die verifizierungs E-mail wurde erfolgreich versandt.']);
-
     }
 
 
@@ -73,6 +72,5 @@ class EMailVerificationController extends Controller
         }
 
         return Redirect::to(config('diribitio.frontend_url') . '/E-Mail verifizieren/200');
-
     }
 }

@@ -306,7 +306,7 @@ class StudentsController extends Controller
     public function store_project(Request $request) {
         $validator = Validator::make($request->all(), [
             'title' => 'required|string',
-            'image' => 'image|nullable|max:1999',
+            'image' => 'sometimes|image|max:1999',
             'descr' => 'required|string',
             'leader_name' => 'required|string',
             'cost' => 'required|numeric',
