@@ -304,26 +304,38 @@ class StudentsController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function store_project(Request $request) {
-        if (!$request->input('image')) {
-            unset($request['image']);
-            echo 'Hello';
+        if ($request->hasFile('image')) {
+            $validator = Validator::make($request->all(), [
+                'title' => 'required|string',
+                'image' => 'image|max:1999',
+                'descr' => 'required|string',
+                'leader_name' => 'required|string',
+                'cost' => 'required|numeric|min:0',   # Wichtig!
+                'first_day_begin' => 'required|date_format:"H:i"',
+                'first_day_end' => 'required|date_format:"H:i"|after:first_day_begin',
+                'second_day_begin' => 'required|date_format:"H:i"',
+                'second_day_end' => 'required|date_format:"H:i"|after:second_day_begin',
+                'min_grade' => 'required|numeric',
+                'max_grade' => 'required|numeric|gte:min_grade',
+                'min_participants' => 'required|numeric|min:0',
+                'max_participants' => 'required|numeric|gte:min_participants',
+            ]);
+        } else {
+            $validator = Validator::make($request->all(), [
+                'title' => 'required|string',
+                'descr' => 'required|string',
+                'leader_name' => 'required|string',
+                'cost' => 'required|numeric|min:0',   # Wichtig!
+                'first_day_begin' => 'required|date_format:"H:i"',
+                'first_day_end' => 'required|date_format:"H:i"|after:first_day_begin',
+                'second_day_begin' => 'required|date_format:"H:i"',
+                'second_day_end' => 'required|date_format:"H:i"|after:second_day_begin',
+                'min_grade' => 'required|numeric',
+                'max_grade' => 'required|numeric|gte:min_grade',
+                'min_participants' => 'required|numeric|min:0',
+                'max_participants' => 'required|numeric|gte:min_participants',
+            ]);
         }
-
-        $validator = Validator::make($request->all(), [
-            'title' => 'required|string',
-            'image' => 'nullable|sometimes|image|max:1999',
-            'descr' => 'required|string',
-            'leader_name' => 'required|string',
-            'cost' => 'required|numeric|min:0',   # Wichtig!
-            'first_day_begin' => 'required|date_format:"H:i"',
-            'first_day_end' => 'required|date_format:"H:i"|after:first_day_begin',
-            'second_day_begin' => 'required|date_format:"H:i"',
-            'second_day_end' => 'required|date_format:"H:i"|after:second_day_begin',
-            'min_grade' => 'required|numeric',
-            'max_grade' => 'required|numeric|gte:min_grade',
-            'min_participants' => 'required|numeric|min:0',
-            'max_participants' => 'required|numeric|gte:min_participants',
-        ]);
 
         if (!config('diribitio.allow_student_projects')) {
             return response()->json("Du bist als Schüler nicht berechtigt ein Projekt zu erstellen.", 403);
