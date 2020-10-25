@@ -304,14 +304,16 @@ class StudentsController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function store_project(Request $request) {
-        echo 'image';
+        if (!$request->input('image')) {
+            unset($request->image);
+        }
 
         $validator = Validator::make($request->all(), [
             'title' => 'required|string',
-            'image' => 'nullable|image|max:1999',
+            'image' => 'nullable|sometimes|image|max:1999',
             'descr' => 'required|string',
             'leader_name' => 'required|string',
-            'cost' => 'required|numeric',
+            'cost' => 'required|numeric|min:0',   # Wichtig!
             'first_day_begin' => 'required|date_format:"H:i"',
             'first_day_end' => 'required|date_format:"H:i"|after:first_day_begin',
             'second_day_begin' => 'required|date_format:"H:i"',
