@@ -304,9 +304,11 @@ class StudentsController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function store_project(Request $request) {
+        echo 'image';
+
         $validator = Validator::make($request->all(), [
             'title' => 'required|string',
-            'image' => 'sometimes|image|max:1999',
+            'image' => 'nullable|image|max:1999',
             'descr' => 'required|string',
             'leader_name' => 'required|string',
             'cost' => 'required|numeric',
