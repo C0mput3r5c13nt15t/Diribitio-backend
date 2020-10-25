@@ -310,7 +310,7 @@ class StudentsController extends Controller
                 'image' => 'image|max:1999',
                 'descr' => 'required|string',
                 'leader_name' => 'required|string',
-                'cost' => 'required|numeric|min:0',   # Wichtig!
+                'cost' => 'required|numeric|min:0',
                 'first_day_begin' => 'required|date_format:"H:i"',
                 'first_day_end' => 'required|date_format:"H:i"|after:first_day_begin',
                 'second_day_begin' => 'required|date_format:"H:i"',
@@ -325,7 +325,7 @@ class StudentsController extends Controller
                 'title' => 'required|string',
                 'descr' => 'required|string',
                 'leader_name' => 'required|string',
-                'cost' => 'required|numeric|min:0',   # Wichtig!
+                'cost' => 'required|numeric|min:0',
                 'first_day_begin' => 'required|date_format:"H:i"',
                 'first_day_end' => 'required|date_format:"H:i"|after:first_day_begin',
                 'second_day_begin' => 'required|date_format:"H:i"',
@@ -459,14 +459,14 @@ class StudentsController extends Controller
         $validator = Validator::make($request->all(), [
             'first_name' => 'required|string|min:1',
             'last_name' => 'required|string|min:1',
-            'grade' => 'required|numeric',
+            'grade' => 'required|numeric|min:0',
             'letter' => 'required|alpha|min:1|max:1',
             'first_friend' => 'required|numeric',
             'second_friend' => 'required|numeric',
             'third_friend' => 'required|numeric',
-            'first_wish' => 'required|numeric|min:0|not_in:0',
-            'second_wish' => 'required|numeric|min:0|not_in:0',
-            'third_wish' => 'required|numeric|min:0|not_in:0',
+            'first_wish' => 'required|numeric|min:1',
+            'second_wish' => 'required|numeric|min:1|different:first_wish',
+            'third_wish' => 'required|numeric|min:1|different:first_wish|different:second_wish',
         ]);
 
         if ($validator->fails()) {
@@ -649,7 +649,7 @@ class StudentsController extends Controller
             'title' => 'required|string',
             'descr' => 'required|string',
             'leader_name' => 'required|string',
-            'cost' => 'required|numeric',
+            'cost' => 'required|numeric|min:0',
             'first_day_begin' => 'required|date_format:"H:i"',
             'first_day_end' => 'required|date_format:"H:i"|after:first_day_begin',
             'second_day_begin' => 'required|date_format:"H:i"',

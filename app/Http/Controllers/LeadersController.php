@@ -97,21 +97,38 @@ class LeadersController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function store_project(Request $request) {
-        $validator = Validator::make($request->all(), [
-            'title' => 'required|string',
-            'image' => 'image|nullable|max:1999',
-            'descr' => 'required|string',
-            'leader_name' => 'required|string',
-            'cost' => 'required|numeric',
-            'first_day_begin' => 'required|date_format:"H:i"',
-            'first_day_end' => 'required|date_format:"H:i"|after:first_day_begin',
-            'second_day_begin' => 'required|date_format:"H:i"',
-            'second_day_end' => 'required|date_format:"H:i"|after:second_day_begin',
-            'min_grade' => 'required|numeric',
-            'max_grade' => 'required|numeric|gte:min_grade',
-            'min_participants' => 'required|numeric|min:0',
-            'max_participants' => 'required|numeric|gte:min_participants',
-        ]);
+        if ($request->hasFile('image')) {
+            $validator = Validator::make($request->all(), [
+                'title' => 'required|string',
+                'image' => 'image|max:1999',
+                'descr' => 'required|string',
+                'leader_name' => 'required|string',
+                'cost' => 'required|numeric|min:0',
+                'first_day_begin' => 'required|date_format:"H:i"',
+                'first_day_end' => 'required|date_format:"H:i"|after:first_day_begin',
+                'second_day_begin' => 'required|date_format:"H:i"',
+                'second_day_end' => 'required|date_format:"H:i"|after:second_day_begin',
+                'min_grade' => 'required|numeric',
+                'max_grade' => 'required|numeric|gte:min_grade',
+                'min_participants' => 'required|numeric|min:0',
+                'max_participants' => 'required|numeric|gte:min_participants',
+            ]);
+        } else {
+            $validator = Validator::make($request->all(), [
+                'title' => 'required|string',
+                'descr' => 'required|string',
+                'leader_name' => 'required|string',
+                'cost' => 'required|numeric|min:0',
+                'first_day_begin' => 'required|date_format:"H:i"',
+                'first_day_end' => 'required|date_format:"H:i"|after:first_day_begin',
+                'second_day_begin' => 'required|date_format:"H:i"',
+                'second_day_end' => 'required|date_format:"H:i"|after:second_day_begin',
+                'min_grade' => 'required|numeric',
+                'max_grade' => 'required|numeric|gte:min_grade',
+                'min_participants' => 'required|numeric|min:0',
+                'max_participants' => 'required|numeric|gte:min_participants',
+            ]);
+        }
 
         if ($validator->fails()) {
             return response()->json("Die mitgesendeten Daten der Anfrage sind ungültig.", 406);
@@ -180,7 +197,7 @@ class LeadersController extends Controller
             'title' => 'required|string',
             'descr' => 'required|string',
             'leader_name' => 'required|string',
-            'cost' => 'required|numeric',
+            'cost' => 'required|numeric|min:0',
             'first_day_begin' => 'required|date_format:"H:i"',
             'first_day_end' => 'required|date_format:"H:i"|after:first_day_begin',
             'second_day_begin' => 'required|date_format:"H:i"',
