@@ -305,7 +305,8 @@ class StudentsController extends Controller
      */
     public function store_project(Request $request) {
         if (!$request->input('image')) {
-            unset($request->image);
+            unset($request['image']);
+            echo 'Hello'
         }
 
         $validator = Validator::make($request->all(), [
