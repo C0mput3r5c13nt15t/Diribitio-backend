@@ -59,7 +59,7 @@ class ResetPasswordController extends Controller
      */
     protected function sendResetResponse(Request $request, $response)
     {
-        return response(['message'=> trans($response)]);
+        return response(['message'=> 'Das Passwort wurde erfolgreich geändert.']);
     }
 
     /**
@@ -71,7 +71,7 @@ class ResetPasswordController extends Controller
      */
     protected function sendResetFailedResponse(Request $request, $response)
     {
-        return response(trans($response), 400);
+        return response('Es gab einen Fehler beim Ändern des Passworts.', 400);
     }
 
     /**

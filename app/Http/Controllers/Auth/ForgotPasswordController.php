@@ -25,7 +25,7 @@ class ForgotPasswordController extends Controller
      */
     protected function sendResetLinkResponse(Request $request, $response)
     {
-        return response(['message'=> $response]);
+        return response(['message' => 'Die E-Mail wurde erfolgreich versandt.']);
 
     }
 
@@ -38,7 +38,7 @@ class ForgotPasswordController extends Controller
      */
     protected function sendResetLinkFailedResponse(Request $request, $response)
     {
-        return response($response, 422);
+        return response('Es gab einen Fehler beim Versenden der E-Mail.', 422);
 
     }
 
