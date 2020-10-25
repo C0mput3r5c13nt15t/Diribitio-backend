@@ -65,15 +65,14 @@ class EMailVerificationController extends Controller
         }
 
         if ($request->user('students')->hasVerifiedEmail()) {
-            # return response('Sie haben ihre E-Mail bereits verifiziert.', 400);
-            return Redirect::to('http://localhost:8100/Projekttage/E-Mail verifizieren/400');
+            return Redirect::to(config('diribitio.frontend_url') . '/E-Mail verifizieren/400');
         }
 
         if ($request->user('students')->markEmailAsVerified()) {
             event(new Verified($request->user('students')));
         }
 
-        return Redirect::to('http://localhost:8100/Projekttage/E-Mail verifizieren/200');
+        return Redirect::to(config('diribitio.frontend_url') . '/E-Mail verifizieren/200');
 
     }
 }

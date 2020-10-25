@@ -18,4 +18,6 @@ return [
 
     'required_email_suffix' => '@yourschool.onmicrosoft.com',
 
+    'frontend_url' => 'http://192.248.186.231/Studienreisen',
+
 ];

@@ -59,18 +59,18 @@ class PasswordReset extends Notification
      */
     public function toMail($notifiable)
     {
+        $resetUrl = url(config('diribitio.frontend_url') . '/Anmeldung/Passwort%20zurücksetzen/' . $this->token, [
+            'email' => $notifiable->getEmailForPasswordReset(),
+        ], false);
+
         if (static::$toMailCallback) {
             return call_user_func(static::$toMailCallback, $notifiable, $this->token);
         }
 
-        $url = url('http://localhost:8100/Projekttage/Anmeldung/Passwort%20zurücksetzen/' . $this->token, [
-            'email' => $notifiable->getEmailForPasswordReset(),
-        ], false);
-
         return (new MailMessage)
             ->subject(Lang::get('Passwort zurücksetzen'))
             ->line(Lang::get('Sie bekommen diese E-Mail, da von ihrem Account aus eine Passwort-Zurücksetzen-Anfrage gesendet wurde.'))
-            ->action(Lang::get('Passwort zurücksetzen'), $url)
+            ->action(Lang::get('Passwort zurücksetzen'), $resetUrl)
             ->line(Lang::get('Dieser Link verliert seine Gültigkeit in :count Minuten.', ['count' => config('auth.passwords.'.config('auth.defaults.passwords').'.expire')]))
             ->line(Lang::get('Falls sie ihr Passwort nicht zurücksetzten wollten, geben sie bitte dem Administrator bescheid.'));
     }
