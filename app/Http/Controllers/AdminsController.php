@@ -25,6 +25,12 @@ use App\Http\Resources\Schedule as ScheduleResource;
 
 class AdminsController extends Controller
 {
+    const $genitive_project_noun = config('diribitio.genitive_project_noun')
+    const $definite_article_project_noun = config('diribitio.definite_article_project_noun')
+    const $indefinite_article_project_noun = config('diribitio.indefinite_article_project_noun')
+    const $genitive_project_leader = config('diribitio.genitive_project_leader')
+    const $definite_article_project_leader = config('diribitio.definite_article_project_leader')
+
     /**
      * Display a listing of the students.
      *
@@ -265,13 +271,13 @@ class AdminsController extends Controller
 
                 if ($project->save()) {
                     // $data = new ProjectResource($project);
-                    return response()->json(['message' => 'Das wurde erfolgreich aktualisiert.'], 200);
+                    return response()->json(['message' => $definite_article_project_noun . ' wurde erfolgreich aktualisiert.'], 200);
                 } else {
-                    return response()->json('Es gab einen Fehler beim Aktualisieren des Projektes.', 500);
+                    return response()->json('Es gab einen Fehler beim Aktualisieren' . $genitive_project_noun .  '.', 500);
                 }
             }
         } else {
-            return response()->json('Das Projekt kann nicht zugelassen werden, während es zur Bearbeitung freigegeben ist.', 500);
+            return response()->json($definite_article_project_noun . ' ist zur Bearbeitung freigegeben und kann währenddessen nicht zugelassen werden.', 500);
         }
 
     }
@@ -293,9 +299,9 @@ class AdminsController extends Controller
 
             if ($project->save()) {
                 // $data = new ProjectResource($project);
-                return response()->json(['message' => 'Das Projekt wurde erfolgreich aktualisiert.'], 200);
+                return response()->json(['message' => $definite_article_project_noun . ' wurde erfolgreich aktualisiert.'], 200);
             } else {
-                return response()->json('Es gab einen Fehler beim Aktualisieren des Projektes.', 500);
+                return response()->json('Es gab einen Fehler beim Aktualisieren ' . $genitive_project_noun .  '.', 500);
             }
         }
 
@@ -321,7 +327,7 @@ class AdminsController extends Controller
         ]);
 
         if ($validator->fails()) {
-            return response()->json("Die mitgesendeten Daten der Anfrage sind ungültig.", 406);
+            return response()->json('Die mitgesendeten Daten der Anfrage sind ungültig.', 406);
         }
 
         $schedule = Schedule::findOrFail(1);
@@ -354,12 +360,12 @@ class AdminsController extends Controller
 
         if ($leader->project_id == 0 && !$leader->leaded_project()->exists()) {
             if ($leader->delete()) {
-                return response()->json(['message' => 'Der Projektleiter wurde erfolgreich gelöscht.'], 200);
+                return response()->json(['message' => $definite_article_project_leader . ' wurde erfolgreich gelöscht.'], 200);
             } else {
-                return response()->json('Es gab einen Fehler beim Löschen des Projektleiters.', 500);
+                return response()->json('Es gab einen Fehler beim Löschen ' . $genitive_project_leader . '.', 500);
             }
         } else {
-            return response()->json('Der Projektleiter konnte nicht gelöscht werden, da der noch ein Projekt leitet.', 403);
+            return response()->json($definite_article_project_leader . '  konnte nicht gelöscht werden, da er noch ' . $indefinite_article_project_noun . ' leitet.', 403);
         }
     }
 
@@ -385,7 +391,7 @@ class AdminsController extends Controller
             if ($project->leader()->exists()) {
                 $leader->delete();
             } else {
-                // return response()->json('Das Projekt wird von niemandem geleitet.', 500);        // Kein Fehler weil Testprojekte keine Leiter haben
+                return response()->json($definite_article_project_noun . ' wird von niemandem geleitet.', 500);
             }
 
             if ($messages->exists()) {
@@ -396,12 +402,12 @@ class AdminsController extends Controller
                         }
                         // unset($project->participants);
                         // return new ProjectResource($project);
-                        return response()->json(['message' => 'Das Projekt wurde erfolgreich gelöscht.'], 200);
+                        return response()->json(['message' => $definite_article_project_noun . ' wurde erfolgreich gelöscht.'], 200);
                     } else {
-                        return response()->json('Es gab einen Fehler beim Löschen des Projektes.', 500);
+                        return response()->json('Es gab einen Fehler beim Löschen ' . $genitive_project_noun .  '.', 500);
                     }
                 } else {
-                    return response()->json('Es gab einen Fehler beim Löschen der Nachrichten des Projektes.', 500);
+                    return response()->json('Es gab einen Fehler beim Löschen der Nachrichten ' . $genitive_project_noun .  '.', 500);
                 }
             } else {
                 if ($project->delete()) {
@@ -410,16 +416,16 @@ class AdminsController extends Controller
                     }
                     // unset($project->participants);
                     // return new ProjectResource($project);
-                    return response()->json(['message' => 'Das Projekt wurde erfolgreich gelöscht.'], 200);
+                    return response()->json(['message' => $definite_article_project_noun . ' wurde erfolgreich gelöscht.'], 200);
                 } else {
-                    return response()->json('Es gab einen Fehler beim Löschen des Projektes.', 500);
+                    return response()->json('Es gab einen Fehler beim Löschen ' . $genitive_project_noun .  '.', 500);
                 }
             }
         } else if ($project->leader_type === 'App\Student') {
             if ($project->assistant_student_leaders()->exists()) {          // Beinhaltet auch den Admin
                 $student_leader_assistants = $project->assistant_student_leaders;
             } else {
-                return response()->json('Das Projekt wird von niemandem geleitet.', 500);
+                return response()->json($definite_article_project_noun . ' wird von niemandem geleitet.', 500);
             }
 
             $errors = 0;
@@ -434,7 +440,7 @@ class AdminsController extends Controller
             });
 
             if ($errors != 0) {
-                return response()->json('Es gab' . strval($errors) . 'Fehler beim Aktualisieren der Accounts der Projektleiter (Schüler)', 500);
+                return response()->json('Es gab ' . strval($errors) . ' Fehler beim Aktualisieren der Accounts der Schüler.', 500);
             }
 
             unset($project->assistant_student_leaders);
@@ -447,9 +453,9 @@ class AdminsController extends Controller
                         }
                         // unset($project->participants);
                         // return new ProjectResource($project);
-                        return response()->json(['message' => 'Das Projekt wurde erfolgreich gelöscht.'], 200);
+                        return response()->json(['message' => $definite_article_project_noun . ' wurde erfolgreich gelöscht.'], 200);
                     } else {
-                        return response()->json('Es gab einen Fehler beim Löschen des Projektes.', 500);
+                        return response()->json('Es gab einen Fehler beim Löschen ' . $genitive_project_noun .  '.', 500);
                     }
                 } else {
                     return response()->json('Es gab einen Fehler beim Löschen der Nachrichten.', 500);
@@ -461,9 +467,9 @@ class AdminsController extends Controller
                     }
                     // unset($project->participants);
                     // return new ProjectResource($project);
-                    return response()->json(['message' => 'Das Projekt wurde erfolgreich gelöscht.'], 200);
+                    return response()->json(['message' => $definite_article_project_noun . ' wurde erfolgreich gelöscht.'], 200);
                 } else {
-                    return response()->json('Es gab einen Fehler beim Löschen des Projektes.', 500);
+                    return response()->json('Es gab einen Fehler beim Löschen ' . $genitive_project_noun .  '.', 500);
                 }
             }
         }

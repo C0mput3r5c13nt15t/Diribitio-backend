@@ -35,7 +35,7 @@ class Controller extends BaseController
         } catch (\Tymon\JWTAuth\Exceptions\TokenBlacklistedException $e) {
             abort(response()->json('Das verwendete Token befindet sich auf der Blacklist.', 401));
         } catch (\Tymon\JWTAuth\Exceptions\JWTException $e) {
-            abort(response()->json('Es gab eine Fehler mit dem dem Token.', 400));
+            abort(response()->json('Es gab einen unbekannten Fehler mit dem dem Token.', 400));
         }
 
         return $user;

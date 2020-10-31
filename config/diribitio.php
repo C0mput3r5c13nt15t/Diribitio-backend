@@ -20,4 +20,16 @@ return [
 
     'frontend_url' => 'http://192.248.186.231/#/Projekttage',
 
+    'definite_article_project_noun' => 'Das Projekt',
+
+    'indefinite_article_project_noun' => 'ein Projekt',
+
+    'genitive_project_noun' => 'des Projektes',
+
+    'no_project_noun' => 'kein Projekt',
+
+    'definite_article_project_leader' => 'Der Projektleiter',
+
+    'genitive_project_leader' => 'des Projektleiters',
+
 ];

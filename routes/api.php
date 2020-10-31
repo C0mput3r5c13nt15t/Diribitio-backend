@@ -94,7 +94,7 @@ Route::middleware(['api', 'jwt:admins'])->group(function () {
     });
 });
 
-Route::post('students/register', 'StudentAuth\RegisterController@register', function ($request) {} )->middleware('schedule:begin,control')->name('students.register'); // evtl. Registrierung der Schüler bis registration, da sie nicht unbedingt ein Projekt erstellen wollen
+Route::post('students/register', 'StudentAuth\RegisterController@register', function ($request) {} )->middleware('schedule:begin,control')->name('students.register');
 Route::post('leaders/register', 'LeaderAuth\RegisterController@register', function ($request) {} )->middleware('schedule:begin,control')->name('leaders.register');
 Route::post('admins/register', 'AdminAuth\RegisterController@register', function ($request) {} )->middleware('schedule:begin,sort_students')->name('admins.register');
 

@@ -39,7 +39,7 @@ class SignUpEmailsController extends Controller
         ]);
 
         if (!Str::contains($request->input('email'), [config('diribitio.required_email_suffix')])) {
-            return response()->json("Die Email ist ungültig!", 406);
+            return response()->json('Die Email ist ungültig!', 406);
         }
 
         if ($validator->fails()) {

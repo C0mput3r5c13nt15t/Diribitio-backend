@@ -372,7 +372,7 @@ class SortStudentsController extends Controller
             "id" => $return_data->max('id')+1,
             "title" => "Nicht zuordnbare Schüler",
             "leader_id" => 0,
-            "leader_name" => "Bitte das Projekt leeren",
+            "leader_name" => "Bitte alle Schüler entfernen",
             "leader_type" => "App\\Leader",
             "min_grade" => 0,
             "max_grade" => 13,

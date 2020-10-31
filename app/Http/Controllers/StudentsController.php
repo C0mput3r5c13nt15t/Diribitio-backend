@@ -17,6 +17,10 @@ use App\Http\Resources\Message as MessageResource;
 
 class StudentsController extends Controller
 {
+    const $genitive_project_noun = config('diribitio.genitive_project_noun')
+    const $definite_article_project_noun = config('diribitio.definite_article_project_noun')
+    const $indefinite_article_project_noun = config('diribitio.indefinite_article_project_noun')
+    const $no_project_noun = config('diribitio.no_project_noun')
 
     /**
      * Display the student associated to the provided first_name, last_name, grade and letter.
@@ -175,7 +179,7 @@ class StudentsController extends Controller
             }
 
         } else {
-            return response()->json('Du nimmst an keinem Projekt teil.', 401);
+            return response()->json('Du hast noch ' . $no_project_noun . '.', 401);
         }
 
         return new ProjectResource($project);
@@ -230,7 +234,7 @@ class StudentsController extends Controller
                 $leaded_project->assistant_student_leaders = [];
             }
         } else {
-            return response()->json('Du leitest kein Projekt.', 401);
+            return response()->json('Du leitest ' . $no_project_noun . '.', 401);
         }
 
         return new ProjectResource($leaded_project);
@@ -273,24 +277,24 @@ class StudentsController extends Controller
                     return response()->json('Du kannst nicht mit dir selber tauschen.', 403);
                 }
             } else if ($receiver->role != 1) {
-                return response()->json('Der angegebene Empfänger ist schon Leiter eines Projektes und kann deswegen nicht tauschen.', 403);
+                return response()->json('Der angegebene Empfänger leitet bereits ' . $indefinite_article_project_noun . ' und kann deswegen nicht tauschen.', 403);
             } else if ($receiver->exchange_id != 0) {
                 return response()->json('Der angegebene Empfänger hat bereits eine Tauschanfrage gestellt bzw. bereits getauscht.', 403);
             } else if ($receiver->project_id == 0) {
-                return response()->json('Der angegebene Empfänger nimmt an keinem Projekt teil und kann somit auch nicht tauschen.', 403);
+                return response()->json('Der angegebene Empfänger hat noch ' . $no_project_noun . ' und kann somit auch nicht tauschen.', 403);
             } else if ($receiver->project_id == $student->project_id) {
-                return response()->json('Du kannst nicht mit einer Person tauschen, die im selben Projekt ist wie du.', 403);
+                return response()->json('Du kannst nicht mit einer Person ' . $genitive_project_noun . ' tauschen, an dem du bereits telnimmst.', 403);
             } else {
                 return response()->json('Es gab einen Fehler beim Erstellen der Tauschanfrage.', 500);
             }
 
         } else {
             if ($student->role != 1 ) {
-                return response()->json('Du bist schon Leiter eines Projektes und kannst deswegen nicht tauschen.', 403);
+                return response()->json('Du leites bereits ' . $indefinite_article_project_noun . ' und kannst deswegen nicht tauschen.', 403);
             } else if ($student->exchange_id != 0 ) {
                 return response()->json('Du hast bereits eine Tauschanfrage gestellt bzw. bereits getauscht.', 403);
             } else if ($student->project_id == 0 ) {
-                return response()->json('Du nimmst an keinem Projekt teil und kannst somit auch nicht tauschen.', 403);
+                return response()->json('Du hast noch ' . $no_project_noun . ' und kannst somit auch nicht tauschen.', 403);
             } else {
                 return response()->json('Es gab einen Fehler beim Erstellen der Tauschanfrage.', 500);
             }
@@ -338,11 +342,11 @@ class StudentsController extends Controller
         }
 
         if (!config('diribitio.allow_student_projects')) {
-            return response()->json("Du bist als Schüler nicht berechtigt ein Projekt zu erstellen.", 403);
+            return response()->json('Du bist als Schüler nicht berechtigt ' . $indefinite_article_project_noun . ' zu erstellen.', 403);
         }
 
         if ($validator->fails()) {
-            return response()->json("Die mitgesendeten Daten der Anfrage sind ungültig.", 406);
+            return response()->json('Die mitgesendeten Daten der Anfrage sind ungültig.', 406);
         }
 
         $student = $this->authUser();
@@ -382,18 +386,18 @@ class StudentsController extends Controller
 
                 try {
                     if ($student->save()) {
-                        return response()->json(['message' => 'Das Projekt wurde erfolgreich erstellt.'], 200);
+                        return response()->json(['message' => $definite_article_project_noun . ' wurde erfolgreich erstellt.'], 200);
                     } else {
-                        return response()->json('Es gab einen Fehler beim Erstellen deines Projektes.', 500);
+                        return response()->json('Es gab einen Fehler beim Erstellen ' . $genitive_project_noun . '.', 500);
                     }
                 } catch (\Illuminate\Database\QueryException $e) {
-                    return response()->json('Es gab einen Fehler beim Erstellen deines Projektes. Scheinbar ist der Projektname bereits vergeben.', 500);
+                    return response()->json('Es gab einen Fehler beim Erstellen ' . $genitive_project_noun . '. Scheinbar ist der Titel bereits vergeben.', 500);
                 }
             } else {
-                return response()->json('Es gab einen Fehler beim Erstellen des Projektes.', 500);
+                return response()->json('Es gab einen Fehler beim Erstellen ' . $genitive_project_noun .  '.', 500);
             }
         } else {
-            return response()->json('Du bist bereits Leiter eines anderen Projektes', 403);
+            return response()->json('Du leitest bereits ' . $indefinite_article_project_noun . '.', 403);
         }
     }
 
@@ -410,11 +414,11 @@ class StudentsController extends Controller
         ]);
 
         if (!config('diribitio.allow_student_projects')) {
-            return response()->json("Du bist als Schüler nicht berechtigt eine Nachrich zu senden.", 403);
+            return response()->json('Du bist als Schüler nicht berechtigt eine Nachrich zu senden.', 403);
         }
 
         if ($validator->fails()) {
-            return response()->json("Die mitgesendeten Daten der Anfrage sind ungültig.", 406);
+            return response()->json('Die mitgesendeten Daten der Anfrage sind ungültig.', 406);
         }
 
         $student = $this->authUser();
@@ -444,7 +448,7 @@ class StudentsController extends Controller
                 return response()->json('Es gab einen Fehler beim Versenden der Nachricht', 500);
             }
         } else {
-            return response()->json('Du leitest kein Projekt.', 403);
+            return response()->json('Du leitest ' . $no_project_noun . '.', 403);
         }
     }
 
@@ -470,7 +474,7 @@ class StudentsController extends Controller
         ]);
 
         if ($validator->fails()) {
-            return response()->json("Die mitgesendeten Daten der Anfrage sind ungültig.", 406);
+            return response()->json('Die mitgesendeten Daten der Anfrage sind ungültig.', 406);
         }
 
         $student = $this->authUser();
@@ -505,7 +509,7 @@ class StudentsController extends Controller
         $student = $this->authUser();
 
         if (!config('diribitio.allow_student_projects')) {
-            return response()->json("Du bist als Schüler nicht berechtigt einen Assistenten zu ernennen.", 403);
+            return response()->json('Du bist als Schüler nicht berechtigt einen Assistenten zu ernennen.', 403);
         }
 
         if ($student->role === 2 && $student->project_id != 0  && $student->leaded_project()->exists()) {
@@ -524,10 +528,10 @@ class StudentsController extends Controller
                     return response()->json('Es gab einen Fehler beim Ernennen des Schülers zu einem Assistenten.', 500);
                 }
             } else {
-                return response()->json('Der Schüler ist bereits Leiter oder Assistent eines anderen Projektes.', 403);
+                return response()->json('Der Schüler leitet bereits ' . $indefinite_article_project_noun . 'oder ist ein Assistent davon.', 403);
             }
         } else {
-            return response()->json('Du bist nicht der Leiter dieses Projektes.', 403);
+            return response()->json('Du bist nicht der Leiter' . $genitive_project_noun . '.', 403);
         }
     }
 
@@ -542,7 +546,7 @@ class StudentsController extends Controller
         $student = $this->authUser();
 
         if (!config('diribitio.allow_student_projects')) {
-            return response()->json("Du bist als Schüler nicht berechtigt einen Assistenten zu suspendieren.", 403);
+            return response()->json('Du bist als Schüler nicht berechtigt einen Assistenten zu suspendieren.', 403);
         }
 
         if ($student->role === 2 && $student->project_id != 0  && !$student->leaded_project()->exists()) {
@@ -555,7 +559,7 @@ class StudentsController extends Controller
                 return response()->json('Es gab einen Fehler beim Aktualisieren deines Accounts.', 500);
             }
         } else {
-            return response()->json('Du bist nicht der Leiter dieses Projektes.', 403);
+            return response()->json('Du bist nicht der Leiter ' . $genitive_project_noun . '.', 403);
         }
     }
 
@@ -584,10 +588,10 @@ class StudentsController extends Controller
                     return response()->json('Es gab einen Fehler beim suspendieren des Schülers vom Assistenten.', 500);
                 }
             } else {
-                return response()->json('Der Schüler ist kein Assistent in deienm Projekt.', 403);
+                return response()->json('Der Schüler ist kein Assistent' . $genitive_project_noun . '.', 403);
             }
         } else {
-            return response()->json('Du bist nicht der Leiter dieses Projektes.', 403);
+            return response()->json('Du bist nicht der Leiter ' . $genitive_project_noun . '.', 403);
         }
     }
 
@@ -661,11 +665,11 @@ class StudentsController extends Controller
         ]);
 
         if (!config('diribitio.allow_student_projects')) {
-            return response()->json("Du bist als Schüler nicht berechtigt ein Projekt zu aktualisieren.", 403);
+            return response()->json('Du bist als Schüler nicht berechtigt ' . $indefinite_article_project_noun . ' zu aktualisieren.', 403);
         }
 
         if ($validator->fails()) {
-            return response()->json("Die mitgesendeten Daten der Anfrage sind ungültig.", 406);
+            return response()->json('Die mitgesendeten Daten der Anfrage sind ungültig.', 406);
         }
 
         $student = $this->authUser();
@@ -689,20 +693,20 @@ class StudentsController extends Controller
             try {
                 if ($student->leaded_project()->save($project)) {
                     // return new ProjectResource($project);
-                    return response()->json(['message' => 'Das Projekt wurde erfolgreich aktualisiert.'], 200);
+                    return response()->json(['message' => $definite_article_project_noun . ' wurde erfolgreich aktualisiert.'], 200);
                 } else {
-                    return response()->json('Es gab einen Fehler beim Aktualisieren deines Projektes.', 500);
+                    return response()->json('Es gab einen Fehler beim Aktualisieren ' . $genitive_project_noun .  '.', 500);
                 }
             } catch (\Illuminate\Database\QueryException $e) {
-                return response()->json('Es gab einen Fehler beim Erstellen deines Projektes. Scheinbar ist der Projektname bereits vergeben.', 500);
+                return response()->json('Es gab einen Fehler beim Aktualisieren ' . $genitive_project_noun .  '. Scheinbar ist der neue Titel bereits vergeben.', 500);
             }
         } else {
             if ($student->project_id == 0) {
-                return response()->json('Es wurde kein Projekt zum aktualisieren angegeben.', 400);
+                return response()->json('Es wurde ' . $no_project_noun . ' zum aktualisieren angegeben.', 400);
             } else if ($student->role != 2 || !$student->leaded_project()->exists()) {
-                return response()->json('Du bist nicht der Leiter dieses Projektes.', 403);
+                return response()->json('Du bist nicht der Leiter ' . $genitive_project_noun . '.', 403);
             } else {
-                return response()->json('Es gab einen Fehler beim Aktualisieren des Projektes.', 500);
+                return response()->json('Es gab einen Fehler beim Aktualisieren ' . $genitive_project_noun .  '.', 500);
             }
         }
     }
@@ -730,11 +734,11 @@ class StudentsController extends Controller
         ]);
 
         if (!config('diribitio.allow_student_projects')) {
-            return response()->json("Du bist als Schüler nicht berechtigt ein Projekt zu aktualisieren.", 403);
+            return response()->json('Du bist als Schüler nicht berechtigt ' . $indefinite_article_project_noun . ' zu aktualisieren.', 403);
         }
 
         if ($validator->fails()) {
-            return response()->json("Die mitgesendeten Daten der Anfrage sind ungültig.", 406);
+            return response()->json('Die mitgesendeten Daten der Anfrage sind ungültig.', 406);
         }
 
         $leader = $this->authUser();
@@ -743,7 +747,7 @@ class StudentsController extends Controller
             $project = Project::findOrFail($leader->project_id);
 
             if ($project->editable != 1) {
-                return response()->json('Das Projekt kann zurzeit nur mit der Erlaubnis eines Admins bearbeitet werden.', 403);
+                return response()->json($definite_article_project_noun . ' kann zurzeit nur mit der Erlaubnis eines Admins bearbeitet werden.', 403);
             }
 
             $project->editable = false;
@@ -763,15 +767,15 @@ class StudentsController extends Controller
             try {
                 if ($leader->leaded_project()->save($project)) {
                     // return new ProjectResource($project);
-                    return response()->json(['message' => 'Das Projekt wurde erfolgreich aktualisiert.'], 200);
+                    return response()->json(['message' => $definite_article_project_noun . ' wurde erfolgreich aktualisiert.'], 200);
                 } else {
-                    return response()->json('Es gab einen Fehler beim Aktualisieren deines Projektes.', 500);
+                    return response()->json('Es gab einen Fehler beim Aktualisieren ' . $genitive_project_noun .  '.', 500);
                 }
             } catch (\Illuminate\Database\QueryException $e) {
-                return response()->json('Es gab einen Fehler beim Erstellen deines Projektes. Scheinbar ist der Projektname bereits vergeben.', 500);
+                return response()->json('Es gab einen Fehler beim Erstellen ' . $genitive_project_noun .  '. Scheinbar ist der neue Titel bereits vergeben.', 500);
             }
         } else {
-            return response()->json('Sie leiten noch kein Projekt.', 403);
+            return response()->json('Sie leiten noch ' . $no_project_noun . '.', 403);
         }
     }
 
@@ -833,7 +837,7 @@ class StudentsController extends Controller
         $student = $this->authUser();
 
         if (!config('diribitio.allow_student_projects')) {
-            return response()->json("Du bist als Schüler nicht berechtigt eine Nachrich zu löschen.", 403);
+            return response()->json('Du bist als Schüler nicht berechtigt eine Nachrich zu löschen.', 403);
         }
 
         if ($student->role === 2 && $student->project_id != 0 && $student->leaded_project()->exists()) {
@@ -857,7 +861,7 @@ class StudentsController extends Controller
                 return response()->json('Es gab einen Fehler beim Löschen der Nachricht', 500);
             }
         } else {
-            return response()->json('Du leitest kein Projekt.', 403);
+            return response()->json('Du leitest ' . $no_project_noun . '.', 403);
         }
     }
 }
