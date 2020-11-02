@@ -25,12 +25,6 @@ use App\Http\Resources\Schedule as ScheduleResource;
 
 class AdminsController extends Controller
 {
-    const $genitive_project_noun = config('diribitio.genitive_project_noun');
-    const $definite_article_project_noun = config('diribitio.definite_article_project_noun');
-    const $indefinite_article_project_noun = config('diribitio.indefinite_article_project_noun');
-    const $genitive_project_leader = config('diribitio.genitive_project_leader');
-    const $definite_article_project_leader = config('diribitio.definite_article_project_leader');
-
     /**
      * Display a listing of the students.
      *
@@ -269,13 +263,13 @@ class AdminsController extends Controller
                 $project->authorized = $request->input('authorized');
 
                 if ($project->save()) {
-                    return response()->json(['message' => $definite_article_project_noun . ' wurde erfolgreich aktualisiert.'], 200);
+                    return response()->json(['message' => config('diribitio.definite_article_project_noun') . ' wurde erfolgreich aktualisiert.'], 200);
                 } else {
                     return response()->json('Es gab einen unbekannten Fehler.', 500);
                 }
             }
         } else {
-            return response()->json($definite_article_project_noun . ' ist zur Bearbeitung freigegeben und kann währenddessen nicht zugelassen werden.', 500);
+            return response()->json(config('diribitio.definite_article_project_noun') . ' ist zur Bearbeitung freigegeben und kann währenddessen nicht zugelassen werden.', 500);
         }
 
     }
@@ -296,7 +290,7 @@ class AdminsController extends Controller
             $project->authorized = false;
 
             if ($project->save()) {
-                return response()->json(['message' => $definite_article_project_noun . ' wurde erfolgreich aktualisiert.'], 200);
+                return response()->json(['message' => config('diribitio.definite_article_project_noun') . ' wurde erfolgreich aktualisiert.'], 200);
             } else {
                 return response()->json('Es gab einen unbekannten Fehler.', 500, 500);
             }
@@ -356,12 +350,12 @@ class AdminsController extends Controller
 
         if ($leader->project_id == 0 && !$leader->leaded_project()->exists()) {
             if ($leader->delete()) {
-                return response()->json(['message' => $definite_article_project_leader . ' wurde erfolgreich gelöscht.'], 200);
+                return response()->json(['message' => config('diribitio.definite_article_project_leader') . ' wurde erfolgreich gelöscht.'], 200);
             } else {
                 return response()->json('Es gab einen unbekannten Fehler.', 500);
             }
         } else {
-            return response()->json($definite_article_project_leader . '  konnte nicht gelöscht werden, da er noch ' . $indefinite_article_project_noun . ' leitet.', 403);
+            return response()->json(config('diribitio.definite_article_project_leader') . '  konnte nicht gelöscht werden, da er noch ' . config('diribitio.indefinite_article_project_noun') . ' leitet.', 403);
         }
     }
 
@@ -387,7 +381,7 @@ class AdminsController extends Controller
             if ($project->leader()->exists()) {
                 $leader->delete();
             } else {
-                return response()->json($definite_article_project_noun . ' wird von niemandem geleitet.', 500);
+                return response()->json(config('diribitio.definite_article_project_noun') . ' wird von niemandem geleitet.', 500);
             }
 
             if ($messages->exists()) {
@@ -396,19 +390,19 @@ class AdminsController extends Controller
                         if ($project->image != null && $project->image != '') {
                             Storage::delete('public/images/'. $project->image);
                         }
-                        return response()->json(['message' => $definite_article_project_noun . ' wurde erfolgreich gelöscht.'], 200);
+                        return response()->json(['message' => config('diribitio.definite_article_project_noun') . ' wurde erfolgreich gelöscht.'], 200);
                     } else {
                         return response()->json('Es gab einen unbekannten Fehler.', 500);
                     }
                 } else {
-                    return response()->json('Es gab einen Fehler beim Löschen der Nachrichten ' . $genitive_project_noun .  '.', 500);
+                    return response()->json('Es gab einen Fehler beim Löschen der Nachrichten ' . config('diribitio.genitive_project_noun') .  '.', 500);
                 }
             } else {
                 if ($project->delete()) {
                     if ($project->image != null && $project->image != '') {
                         Storage::delete('public/images/'. $project->image);
                     }
-                    return response()->json(['message' => $definite_article_project_noun . ' wurde erfolgreich gelöscht.'], 200);
+                    return response()->json(['message' => config('diribitio.definite_article_project_noun') . ' wurde erfolgreich gelöscht.'], 200);
                 } else {
                     return response()->json('Es gab einen unbekannten Fehler.', 500);
                 }
@@ -417,7 +411,7 @@ class AdminsController extends Controller
             if ($project->assistant_student_leaders()->exists()) {
                 $student_leader_assistants = $project->assistant_student_leaders;
             } else {
-                return response()->json($definite_article_project_noun . ' wird von niemandem geleitet und kann deswegen nicht gelöscht werden.', 500);
+                return response()->json(config('diribitio.definite_article_project_noun') . ' wird von niemandem geleitet und kann deswegen nicht gelöscht werden.', 500);
             }
 
             $errors = 0;
@@ -443,19 +437,19 @@ class AdminsController extends Controller
                         if ($project->image != null && $project->image != '') {
                             Storage::delete('public/images/'. $project->image);
                         }
-                        return response()->json(['message' => $definite_article_project_noun . ' wurde erfolgreich gelöscht.'], 200);
+                        return response()->json(['message' => config('diribitio.definite_article_project_noun') . ' wurde erfolgreich gelöscht.'], 200);
                     } else {
                         return response()->json('Es gab einen unbekannten Fehler.', 500);
                     }
                 } else {
-                    return response()->json('Es gab einen Fehler beim Löschen der Nachrichten ' . $genitive_project_noun . '.', 500);
+                    return response()->json('Es gab einen Fehler beim Löschen der Nachrichten ' . config('diribitio.genitive_project_noun') . '.', 500);
                 }
             } else {
                 if ($project->delete()) {
                     if ($project->image != null && $project->image != '') {
                         Storage::delete('public/images/'. $project->image);
                     }
-                    return response()->json(['message' => $definite_article_project_noun . ' wurde erfolgreich gelöscht.'], 200);
+                    return response()->json(['message' => config('diribitio.definite_article_project_noun') . ' wurde erfolgreich gelöscht.'], 200);
                 } else {
                     return response()->json('Es gab einen unbekannten Fehler.', 500);
                 }

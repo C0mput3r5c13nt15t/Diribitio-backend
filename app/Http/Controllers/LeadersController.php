@@ -15,11 +15,6 @@ use App\Http\Resources\Message as MessageResource;
 
 class LeadersController extends Controller
 {
-    const $genitive_project_noun = config('diribitio.genitive_project_noun');
-    const $definite_article_project_noun = config('diribitio.definite_article_project_noun');
-    const $indefinite_article_project_noun = config('diribitio.indefinite_article_project_noun');
-    const $no_project_noun = config('diribitio.no_project_noun');
-
     /**
      * Display the leader associated to the provided token.
      *
@@ -55,7 +50,7 @@ class LeadersController extends Controller
 
             $leaded_project['participants'] = LimitedStudentResource::collection($leaded_project->participants()->get());
         } else {
-            return response()->json('Sie leiten ' . $no_project_noun . '.', 401);
+            return response()->json('Sie leiten ' . config('diribitio.no_project_noun') . '.', 401);
         }
 
         return new ProjectResource($leaded_project);
@@ -91,7 +86,7 @@ class LeadersController extends Controller
                 return response()->json('Es gab einen unbekannten Fehler.', 500);
             }
         } else {
-            return response()->json('Sie leiten noch ' . $no_project_noun . '.', 403);
+            return response()->json('Sie leiten noch ' . config('diribitio.no_project_noun') . '.', 403);
         }
     }
 
@@ -175,7 +170,7 @@ class LeadersController extends Controller
                     $leader->project_id = $project->id;
 
                     if ($leader->save()) {
-                        return response()->json(['message' => $definite_article_project_noun . ' wurde erfolgreich erstellt.'], 200);
+                        return response()->json(['message' => config('diribitio.definite_article_project_noun') . ' wurde erfolgreich erstellt.'], 200);
                     } else {
                         return response()->json('Es gab beim Aktualisieren ihres Accounts.', 500);
                     }
@@ -186,7 +181,7 @@ class LeadersController extends Controller
                 return response()->json('Scheinbar ist der Titel bereits vergeben.', 500);
             }
         } else {
-            return response()->json('Sie leiten bereits' . $indefinite_article_project_noun . '.', 403);
+            return response()->json('Sie leiten bereits' . config('diribitio.indefinite_article_project_noun') . '.', 403);
         }
     }
 
@@ -236,7 +231,7 @@ class LeadersController extends Controller
 
             try {
                 if ($leader->leaded_project()->save($project)) {
-                    return response()->json(['message' => $definite_article_project_noun . ' wurde erfolgreich aktualisiert.'], 200);
+                    return response()->json(['message' => config('diribitio.definite_article_project_noun') . ' wurde erfolgreich aktualisiert.'], 200);
                 } else {
                     return response()->json('Es gab einen unbekannten Fehler.', 500);
                 }
@@ -244,7 +239,7 @@ class LeadersController extends Controller
                 return response()->json('Scheinbar ist der neue Titel bereits vergeben.', 500);
             }
         } else {
-            return response()->json('Sie leiten noch ' . $no_project_noun . '.', 403);
+            return response()->json('Sie leiten noch ' . config('diribitio.no_project_noun') . '.', 403);
         }
     }
 
@@ -280,7 +275,7 @@ class LeadersController extends Controller
             $project = Project::findOrFail($leader->project_id);
 
             if ($project->editable != 1) {
-                return response()->json($definite_article_project_noun . ' kann zurzeit nur mit der Erlaubnis eines Admins bearbeitet werden.', 403);
+                return response()->json(config('diribitio.definite_article_project_noun') . ' kann zurzeit nur mit der Erlaubnis eines Admins bearbeitet werden.', 403);
             }
 
             $project->editable = false;
@@ -299,7 +294,7 @@ class LeadersController extends Controller
 
             try {
                 if ($leader->leaded_project()->save($project)) {
-                    return response()->json(['message' => $definite_article_project_noun . ' wurde erfolgreich aktualisiert.'], 200);
+                    return response()->json(['message' => config('diribitio.definite_article_project_noun') . ' wurde erfolgreich aktualisiert.'], 200);
                 } else {
                     return response()->json('Es gab einen unbekannten Fehler.', 500);
                 }
@@ -307,7 +302,7 @@ class LeadersController extends Controller
                 return response()->json('Scheinbar ist der neue Titel bereits vergeben.', 500);
             }
         } else {
-            return response()->json('Sie leiten noch ' . $no_project_noun . '.', 403);
+            return response()->json('Sie leiten noch ' . config('diribitio.no_project_noun') . '.', 403);
         }
     }
 
@@ -333,7 +328,7 @@ class LeadersController extends Controller
                 return response()->json('Es gab einen unbekannten Fehler.', 500);
             }
         } else {
-            return response()->json('Sie leiten noch ' . $no_project_noun . '.', 403);
+            return response()->json('Sie leiten noch ' . config('diribitio.no_project_noun') . '.', 403);
         }
     }
 }
