@@ -15,10 +15,10 @@ use App\Http\Resources\Message as MessageResource;
 
 class LeadersController extends Controller
 {
-    const $genitive_project_noun = config('diribitio.genitive_project_noun')
-    const $definite_article_project_noun = config('diribitio.definite_article_project_noun')
-    const $indefinite_article_project_noun = config('diribitio.indefinite_article_project_noun')
-    const $no_project_noun = config('diribitio.no_project_noun')
+    const $genitive_project_noun = config('diribitio.genitive_project_noun');
+    const $definite_article_project_noun = config('diribitio.definite_article_project_noun');
+    const $indefinite_article_project_noun = config('diribitio.indefinite_article_project_noun');
+    const $no_project_noun = config('diribitio.no_project_noun');
 
     /**
      * Display the leader associated to the provided token.

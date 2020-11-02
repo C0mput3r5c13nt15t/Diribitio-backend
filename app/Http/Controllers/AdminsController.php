@@ -25,11 +25,11 @@ use App\Http\Resources\Schedule as ScheduleResource;
 
 class AdminsController extends Controller
 {
-    const $genitive_project_noun = config('diribitio.genitive_project_noun')
-    const $definite_article_project_noun = config('diribitio.definite_article_project_noun')
-    const $indefinite_article_project_noun = config('diribitio.indefinite_article_project_noun')
-    const $genitive_project_leader = config('diribitio.genitive_project_leader')
-    const $definite_article_project_leader = config('diribitio.definite_article_project_leader')
+    const $genitive_project_noun = config('diribitio.genitive_project_noun');
+    const $definite_article_project_noun = config('diribitio.definite_article_project_noun');
+    const $indefinite_article_project_noun = config('diribitio.indefinite_article_project_noun');
+    const $genitive_project_leader = config('diribitio.genitive_project_leader');
+    const $definite_article_project_leader = config('diribitio.definite_article_project_leader');
 
     /**
      * Display a listing of the students.

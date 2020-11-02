@@ -17,10 +17,10 @@ use App\Http\Resources\Message as MessageResource;
 
 class StudentsController extends Controller
 {
-    const $genitive_project_noun = config('diribitio.genitive_project_noun')
-    const $definite_article_project_noun = config('diribitio.definite_article_project_noun')
-    const $indefinite_article_project_noun = config('diribitio.indefinite_article_project_noun')
-    const $no_project_noun = config('diribitio.no_project_noun')
+    const $genitive_project_noun = config('diribitio.genitive_project_noun');
+    const $definite_article_project_noun = config('diribitio.definite_article_project_noun');
+    const $indefinite_article_project_noun = config('diribitio.indefinite_article_project_noun');
+    const $no_project_noun = config('diribitio.no_project_noun');
 
     /**
      * Display the student associated to the provided first_name, last_name, grade and letter.
