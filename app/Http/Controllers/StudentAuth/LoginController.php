@@ -19,7 +19,7 @@ class LoginController extends Controller
 
         if (!$token = auth()->guard('students')->attempt($creds)) {
             http_response_code(401);
-            return response()->json('E-Mail und Passwort stimmen nicht überein!', 401);
+            return response()->json('E-Mail und Passwort stimmen nicht überein.', 401);
         }
 
         $user = auth('students')->user();

@@ -58,7 +58,7 @@ class SignUpEmailsController extends Controller
                 $data = new SignUpEmailResource($sign_up_email);
                 return response()->json(['data' => $data, 'message' => 'Die E-Mail wurde erfolgreich für einen Admin-Account freigegeben.'], 200);
             } else {
-                return response()->json('Es gab einen Fehler beim Erlauben der E-Mail-Adresse.', 500);
+                return response()->json('Es gab einen unbekannten Fehler.', 500);
             }
         } else {
             return response()->json('Es existiert bereits ein Account der diese E-mail benutzt.', 400);
@@ -78,7 +78,7 @@ class SignUpEmailsController extends Controller
         if ($sign_up_email->delete()) {
             return response()->json(['message' => 'Die E-Mail wurde erfolgreich für einen Admin-Account gesperrt.'], 200);
         } else {
-            return response()->json('Es gab einen Fehler beim Löschen der Tokens.', 500);
+            return response()->json('Es gab einen unbekannten Fehler.', 500);
         }
 
     }

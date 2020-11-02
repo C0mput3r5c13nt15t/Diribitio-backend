@@ -88,7 +88,7 @@ class LeadersController extends Controller
             if ($leaded_project->messages()->save($message)) {
                 return new MessageResource($message);
             } else {
-                return response()->json('Es gab einen Fehler beim Versenden der Nachricht', 500);
+                return response()->json('Es gab einen unbekannten Fehler.', 500);
             }
         } else {
             return response()->json('Sie leiten noch ' . $no_project_noun . '.', 403);
@@ -175,16 +175,15 @@ class LeadersController extends Controller
                     $leader->project_id = $project->id;
 
                     if ($leader->save()) {
-                        // return new ProjectResource($project);
                         return response()->json(['message' => $definite_article_project_noun . ' wurde erfolgreich erstellt.'], 200);
                     } else {
-                        return response()->json('Es gab einen Fehler beim Erstellen ' . $genitive_project_noun . '.', 500);
+                        return response()->json('Es gab beim Aktualisieren ihres Accounts.', 500);
                     }
                 } else {
-                    return response()->json('Es gab einen Fehler beim Erstellen ' . $genitive_project_noun . '.', 500);
+                    return response()->json('Es gab einen unbekannten Fehler.', 500);
                 }
             } catch (\Illuminate\Database\QueryException $e) {
-                return response()->json('Es gab einen Fehler beim Erstellen ' . $genitive_project_noun . '. Scheinbar ist der Titel bereits vergeben.', 500);
+                return response()->json('Scheinbar ist der Titel bereits vergeben.', 500);
             }
         } else {
             return response()->json('Sie leiten bereits' . $indefinite_article_project_noun . '.', 403);
@@ -237,13 +236,12 @@ class LeadersController extends Controller
 
             try {
                 if ($leader->leaded_project()->save($project)) {
-                    // return new ProjectResource($project);
                     return response()->json(['message' => $definite_article_project_noun . ' wurde erfolgreich aktualisiert.'], 200);
                 } else {
-                    return response()->json('Es gab einen Fehler beim Aktualisieren ' . $genitive_project_noun . '.', 500);
+                    return response()->json('Es gab einen unbekannten Fehler.', 500);
                 }
             } catch (\Illuminate\Database\QueryException $e) {
-                return response()->json('Es gab einen Fehler beim Aktualisieren ' . $genitive_project_noun . '. Scheinbar ist der neue Titel bereits vergeben.', 500);
+                return response()->json('Scheinbar ist der neue Titel bereits vergeben.', 500);
             }
         } else {
             return response()->json('Sie leiten noch ' . $no_project_noun . '.', 403);
@@ -301,13 +299,12 @@ class LeadersController extends Controller
 
             try {
                 if ($leader->leaded_project()->save($project)) {
-                    // return new ProjectResource($project);
                     return response()->json(['message' => $definite_article_project_noun . ' wurde erfolgreich aktualisiert.'], 200);
                 } else {
-                    return response()->json('Es gab einen Fehler beim Aktualisieren ' . $genitive_project_noun . '.', 500);
+                    return response()->json('Es gab einen unbekannten Fehler.', 500);
                 }
             } catch (\Illuminate\Database\QueryException $e) {
-                return response()->json('Es gab einen Fehler beim Erstellen ' . $genitive_project_noun . '. Scheinbar ist der neue Titel bereits vergeben.', 500);
+                return response()->json('Scheinbar ist der neue Titel bereits vergeben.', 500);
             }
         } else {
             return response()->json('Sie leiten noch ' . $no_project_noun . '.', 403);
@@ -331,10 +328,9 @@ class LeadersController extends Controller
             $message = Message::findOrFail($id);
 
             if ($leaded_project->messages()->where('id', $id)->delete()) {
-                // return new MessageResource($message);
                 return;
             } else {
-                return response()->json('Es gab einen Fehler beim Löschen der Nachricht', 500);
+                return response()->json('Es gab einen unbekannten Fehler.', 500);
             }
         } else {
             return response()->json('Sie leiten noch ' . $no_project_noun . '.', 403);

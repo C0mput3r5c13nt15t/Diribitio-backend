@@ -53,13 +53,13 @@ class RegisterController extends Controller
 
                         return response()->json(['token' => $token]);
                     } else {
-                        return response()->json('Es gab einen Fehler beim Erstellen ihres Accounts.', 500);
+                        return response()->json('Es gab einen unbekannten Fehler.', 500);
                     }
                 } catch (\Illuminate\Database\QueryException $e) {
-                    return response()->json('Es gab einen Fehler beim Erstellen deines Accounts. Scheinbar ist der Benutzername oder die E-Mail bereits vergeben.', 500);
+                    return response()->json('Scheinbar ist der Benutzername oder die E-Mail bereits vergeben.', 500);
                 }
             } else {
-                return response()->json('Du bist nicht berechtigt dich als Admin zu registrieren.', 403);
+                return response()->json('Sie sind nicht berechtigt sich als Admin zu registrieren.', 403);
             }
         } else {
             return response()->json('Diese E-Mail ist bereits vergeben.', 400);

@@ -234,7 +234,7 @@ class StudentsController extends Controller
                 $leaded_project->assistant_student_leaders = [];
             }
         } else {
-            return response()->json('Du leitest ' . $no_project_noun . '.', 401);
+            return response()->json('Du leitest noch ' . $no_project_noun . '.', 401);
         }
 
         return new ProjectResource($leaded_project);
@@ -265,13 +265,12 @@ class StudentsController extends Controller
                         $student->exchange_id = $exchange->id;
 
                         if ($student->save()) {
-                            // return new ExchangeResource($exchange);
                             return response()->json(['message' => 'Die Tauschanfrage wurde erfolgreich gestelt.'], 200);
                         } else {
                             return response()->json('Es gab einen Fehler beim Aktualisieren deines Accounts.', 500);
                         }
                     } else {
-                        return response()->json('Es gab einen Fehler beim Erstellen der Tauschanfrage.', 500);
+                        return response()->json('Es gab einen unbekannten Fehler.', 500);
                     }
                 } else {
                     return response()->json('Du kannst nicht mit dir selber tauschen.', 403);
@@ -285,7 +284,7 @@ class StudentsController extends Controller
             } else if ($receiver->project_id == $student->project_id) {
                 return response()->json('Du kannst nicht mit einer Person ' . $genitive_project_noun . ' tauschen, an dem du bereits telnimmst.', 403);
             } else {
-                return response()->json('Es gab einen Fehler beim Erstellen der Tauschanfrage.', 500);
+                return response()->json('Es gab einen unbekannten Fehler.', 500);
             }
 
         } else {
@@ -296,7 +295,7 @@ class StudentsController extends Controller
             } else if ($student->project_id == 0 ) {
                 return response()->json('Du hast noch ' . $no_project_noun . ' und kannst somit auch nicht tauschen.', 403);
             } else {
-                return response()->json('Es gab einen Fehler beim Erstellen der Tauschanfrage.', 500);
+                return response()->json('Es gab einen unbekannten Fehler.', 500);
             }
         }
     }
@@ -388,13 +387,13 @@ class StudentsController extends Controller
                     if ($student->save()) {
                         return response()->json(['message' => $definite_article_project_noun . ' wurde erfolgreich erstellt.'], 200);
                     } else {
-                        return response()->json('Es gab einen Fehler beim Erstellen ' . $genitive_project_noun . '.', 500);
+                        return response()->json('Es gab einen Fehler beim Aktualisieren deines Accounts.', 500);
                     }
                 } catch (\Illuminate\Database\QueryException $e) {
-                    return response()->json('Es gab einen Fehler beim Erstellen ' . $genitive_project_noun . '. Scheinbar ist der Titel bereits vergeben.', 500);
+                    return response()->json('Scheinbar ist der Titel bereits vergeben.', 500);
                 }
             } else {
-                return response()->json('Es gab einen Fehler beim Erstellen ' . $genitive_project_noun .  '.', 500);
+                return response()->json('Es gab einen unbekannten Fehler.', 500);
             }
         } else {
             return response()->json('Du leitest bereits ' . $indefinite_article_project_noun . '.', 403);
@@ -433,7 +432,7 @@ class StudentsController extends Controller
             if ($leaded_project->messages()->save($message)) {
                 return new MessageResource($message);
             } else {
-                return response()->json('Es gab einen Fehler beim Versenden der Nachricht', 500);
+                return response()->json('Es gab einen unbekannten Fehler.', 500);
             }
         } else if ($student->role === 2 && $student->project_id != 0 && $student->project()->exists()) {
             $leaded_project = $student->project;
@@ -445,7 +444,7 @@ class StudentsController extends Controller
             if ($leaded_project->messages()->save($message)) {
                 return new MessageResource($message);
             } else {
-                return response()->json('Es gab einen Fehler beim Versenden der Nachricht', 500);
+                return response()->json('Es gab einen unbekannten Fehler.', 500);
             }
         } else {
             return response()->json('Du leitest ' . $no_project_noun . '.', 403);
@@ -491,10 +490,9 @@ class StudentsController extends Controller
         $student->third_wish = $request->input('third_wish');
 
         if ($student->save()) {
-            // return new StudentResource($student);
             return response()->json(['message' => 'Dein Account wurde erfolgreich aktualisiert.'], 200);
         } else {
-            return response()->json('Es gab einen Fehler beim Aktualisieren deines Akkounts.', 500);
+            return response()->json('Es gab einen unbekannten Fehler.', 500);
         }
     }
 
@@ -522,10 +520,9 @@ class StudentsController extends Controller
                 $promoted_student->project_id = $leaded_project->id;
 
                 if ($promoted_student->save()) {
-                    // return new LimitedStudentResource($promoted_student);
                     return response()->json(['message' => 'Der Schüler wurde erfolgreich zu einem Assistenten ernannt.'], 200);
                 } else {
-                    return response()->json('Es gab einen Fehler beim Ernennen des Schülers zu einem Assistenten.', 500);
+                    return response()->json('Es gab einen unbekannten Fehler.', 500);
                 }
             } else {
                 return response()->json('Der Schüler leitet bereits ' . $indefinite_article_project_noun . 'oder ist ein Assistent davon.', 403);
@@ -546,7 +543,7 @@ class StudentsController extends Controller
         $student = $this->authUser();
 
         if (!config('diribitio.allow_student_projects')) {
-            return response()->json('Du bist als Schüler nicht berechtigt einen Assistenten zu suspendieren.', 403);
+            return response()->json('Du bist als Schüler nicht berechtigt als Assistenten zu kündigen.', 403);
         }
 
         if ($student->role === 2 && $student->project_id != 0  && !$student->leaded_project()->exists()) {
@@ -556,10 +553,10 @@ class StudentsController extends Controller
             if ($student->save()) {
                 return response()->json(['message' => 'Du bist nun kein Assistent mehr.'], 200);
             } else {
-                return response()->json('Es gab einen Fehler beim Aktualisieren deines Accounts.', 500);
+                return response()->json('Es gab einen unbekannten Fehler.', 500);
             }
         } else {
-            return response()->json('Du bist nicht der Leiter ' . $genitive_project_noun . '.', 403);
+            return response()->json('Du bist kein Assistent ' . $genitive_project_noun . '.', 403);
         }
     }
 
@@ -573,6 +570,10 @@ class StudentsController extends Controller
     {
         $student = $this->authUser();
 
+        if (!config('diribitio.allow_student_projects')) {
+            return response()->json('Du bist als Schüler nicht berechtigt einen Assistenten zu suspendieren.', 403);
+        }
+
         if ($student->role === 2 && $student->project_id != 0  && $student->leaded_project()->exists()) {
             $leaded_project = $student->leaded_project;
 
@@ -585,7 +586,7 @@ class StudentsController extends Controller
                 if ($suspended_student->save()) {
                     return response()->json(['message' => 'Der Schüler wurde erfolgreich von seiner Assistenz suspendiert.'], 200);
                 } else {
-                    return response()->json('Es gab einen Fehler beim suspendieren des Schülers vom Assistenten.', 500);
+                    return response()->json('Es gab einen unbekannten Fehler.', 500);
                 }
             } else {
                 return response()->json('Der Schüler ist kein Assistent' . $genitive_project_noun . '.', 403);
@@ -623,13 +624,12 @@ class StudentsController extends Controller
                         $rejectedExchange->delete();
                     }
 
-                    # return new ExchangeResource($exchange);
                     return response()->json(['message' => 'Du hast die Tauschanfrage wurde erfolgreich angenommen.']);
                 } else {
                     return response()->json('Es gab einen Fehler beim Aktualisieren deines Accounts.', 500);
                 }
             } else {
-                return response()->json('Es gab einen Fehler beim Bestätigen der Tauschanfrage.', 500);
+                return response()->json('Es gab einen unbekannten Fehler.', 500);
             }
         } else {
             if ($student->id != $exchange->receiver_id) {
@@ -637,7 +637,7 @@ class StudentsController extends Controller
             } else if ($student->exchange_id != 0) {
                 return response()->json('Du hast bereits eine Tauschanfrage gestellt bzw. bereits getauscht.', 403);
             } else {
-                return response()->json('Es gab einen Fehler beim Bestätigen der Tauschanfrage.', 500);
+                return response()->json('Es gab einen unbekannten Fehler.', 500);
             }
         }
     }
@@ -692,13 +692,12 @@ class StudentsController extends Controller
 
             try {
                 if ($student->leaded_project()->save($project)) {
-                    // return new ProjectResource($project);
                     return response()->json(['message' => $definite_article_project_noun . ' wurde erfolgreich aktualisiert.'], 200);
                 } else {
-                    return response()->json('Es gab einen Fehler beim Aktualisieren ' . $genitive_project_noun .  '.', 500);
+                    return response()->json('Es gab einen unbekannten Fehler.', 500);
                 }
             } catch (\Illuminate\Database\QueryException $e) {
-                return response()->json('Es gab einen Fehler beim Aktualisieren ' . $genitive_project_noun .  '. Scheinbar ist der neue Titel bereits vergeben.', 500);
+                return response()->json('Scheinbar ist der neue Titel bereits vergeben.', 500);
             }
         } else {
             if ($student->project_id == 0) {
@@ -706,7 +705,7 @@ class StudentsController extends Controller
             } else if ($student->role != 2 || !$student->leaded_project()->exists()) {
                 return response()->json('Du bist nicht der Leiter ' . $genitive_project_noun . '.', 403);
             } else {
-                return response()->json('Es gab einen Fehler beim Aktualisieren ' . $genitive_project_noun .  '.', 500);
+                return response()->json('Es gab einen unbekannten Fehler.', 500);
             }
         }
     }
@@ -766,13 +765,12 @@ class StudentsController extends Controller
 
             try {
                 if ($leader->leaded_project()->save($project)) {
-                    // return new ProjectResource($project);
                     return response()->json(['message' => $definite_article_project_noun . ' wurde erfolgreich aktualisiert.'], 200);
                 } else {
-                    return response()->json('Es gab einen Fehler beim Aktualisieren ' . $genitive_project_noun .  '.', 500);
+                    return response()->json('Es gab einen unbekannten Fehler.', 500);
                 }
             } catch (\Illuminate\Database\QueryException $e) {
-                return response()->json('Es gab einen Fehler beim Erstellen ' . $genitive_project_noun .  '. Scheinbar ist der neue Titel bereits vergeben.', 500);
+                return response()->json('Scheinbar ist der neue Titel bereits vergeben.', 500);
             }
         } else {
             return response()->json('Sie leiten noch ' . $no_project_noun . '.', 403);
@@ -801,28 +799,27 @@ class StudentsController extends Controller
                         } else if ($student->id === $exchange->receiver_id) {
                             $second_student = $exchange->sender;
                         } else {
-                            return response()->json('Es gab einen Fehler beim Aktualisieren des Accounts deines Tauschpartners. Bitte informiere ihn oder einen Systemadministrator.', 500);
+                            return response()->json('Es gab einen Fehler beim Aktualisieren des Accounts deines Tauschpartners.', 500);
                         }
 
                         $second_student->exchange_id = 0;
 
                         if ($second_student->save()) {
-                            // return new ExchangeResource($exchange);
                             return response()->json(['message' => 'Die Tauschanfrage wurde erfolgreich gelöscht.'], 200);
                         } else {
-                            return response()->json('Es gab einen Fehler beim Aktualisieren des Accounts deines Tauschpartners. Bitte informiere ihn oder einen Systemadministrator.', 500);
+                            return response()->json('Es gab einen Fehler beim Aktualisieren des Accounts deines Tauschpartners.', 500);
                         }
                     } else {
                         return new ExchangeResource($exchange);
                     }
                 } else {
-                    return response()->json('Es gab einen Fehler beim Aktualisieren deines Accounts. Bitte informiere einen Systemadministrator.', 500);
+                    return response()->json('Es gab einen Fehler beim Aktualisieren deines Accounts.', 500);
                 }
             } else {
-                return response()->json('Es gab einen Fehler beim Löschen der Tauschanfrage.', 500);
+                return response()->json('Es gab einen unbekannten Fehler.', 500);
             }
         } else {
-            return response()->json('Du kannst noch keine Tauschanfrage löschen, da du noch nicht tauschst.', 403);
+            return response()->json('Du kannst noch keine Tauschanfrage löschen, da du noch keine erstellt hast.', 403);
         }
     }
 
@@ -848,7 +845,7 @@ class StudentsController extends Controller
             if ($leaded_project->messages()->where('id', $id)->delete()) {
                 return;
             } else {
-                return response()->json('Es gab einen Fehler beim Löschen der Nachricht', 500);
+                return response()->json('Es gab einen unbekannten Fehler.', 500);
             }
         } else if ($student->role === 2 && $student->project_id != 0 && $student->project()->exists()) {
             $leaded_project = $student->project;
@@ -858,7 +855,7 @@ class StudentsController extends Controller
             if ($leaded_project->messages()->where('id', $id)->delete()) {
                 return;
             } else {
-                return response()->json('Es gab einen Fehler beim Löschen der Nachricht', 500);
+                return response()->json('Es gab einen unbekannten Fehler.', 500);
             }
         } else {
             return response()->json('Du leitest ' . $no_project_noun . '.', 403);

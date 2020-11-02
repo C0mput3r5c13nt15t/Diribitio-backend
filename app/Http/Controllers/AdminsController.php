@@ -240,7 +240,6 @@ class AdminsController extends Controller
                 if ($receiver->save()) {
                     $exchange->accomplished = 1;
                     if ($exchange->save()) {
-                        // return new ExchangeResource($exchange);
                         return response()->json(['message' => 'Der Tausch wurde erfolgreich durchgeführt.'], 200);
                     }
                 } else {
@@ -255,7 +254,7 @@ class AdminsController extends Controller
     }
 
     /**
-     * Toggle authorized of the specified project in storage.
+     * Toggle authorized of the specified project.
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  int  $id
@@ -270,10 +269,9 @@ class AdminsController extends Controller
                 $project->authorized = $request->input('authorized');
 
                 if ($project->save()) {
-                    // $data = new ProjectResource($project);
                     return response()->json(['message' => $definite_article_project_noun . ' wurde erfolgreich aktualisiert.'], 200);
                 } else {
-                    return response()->json('Es gab einen Fehler beim Aktualisieren' . $genitive_project_noun .  '.', 500);
+                    return response()->json('Es gab einen unbekannten Fehler.', 500);
                 }
             }
         } else {
@@ -283,7 +281,7 @@ class AdminsController extends Controller
     }
 
     /**
-     * Toggle authorized of the specified project in storage.
+     * Toggle editable of the specified project.
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  int  $id
@@ -298,10 +296,9 @@ class AdminsController extends Controller
             $project->authorized = false;
 
             if ($project->save()) {
-                // $data = new ProjectResource($project);
                 return response()->json(['message' => $definite_article_project_noun . ' wurde erfolgreich aktualisiert.'], 200);
             } else {
-                return response()->json('Es gab einen Fehler beim Aktualisieren ' . $genitive_project_noun .  '.', 500);
+                return response()->json('Es gab einen unbekannten Fehler.', 500, 500);
             }
         }
 
@@ -341,7 +338,6 @@ class AdminsController extends Controller
         $schedule->end = $request->input('end');
 
         if ($schedule->save()) {
-            // return new ScheduleResource($schedule)
             return ['message' => 'Der Zeitplan wurde erfolgreich aktualisiert!'];
         } else {
             return response()->json('Es gab einen Fehler beim Aktualisieren des Zeitplanes.', 500);
@@ -362,7 +358,7 @@ class AdminsController extends Controller
             if ($leader->delete()) {
                 return response()->json(['message' => $definite_article_project_leader . ' wurde erfolgreich gelöscht.'], 200);
             } else {
-                return response()->json('Es gab einen Fehler beim Löschen ' . $genitive_project_leader . '.', 500);
+                return response()->json('Es gab einen unbekannten Fehler.', 500);
             }
         } else {
             return response()->json($definite_article_project_leader . '  konnte nicht gelöscht werden, da er noch ' . $indefinite_article_project_noun . ' leitet.', 403);
@@ -400,11 +396,9 @@ class AdminsController extends Controller
                         if ($project->image != null && $project->image != '') {
                             Storage::delete('public/images/'. $project->image);
                         }
-                        // unset($project->participants);
-                        // return new ProjectResource($project);
                         return response()->json(['message' => $definite_article_project_noun . ' wurde erfolgreich gelöscht.'], 200);
                     } else {
-                        return response()->json('Es gab einen Fehler beim Löschen ' . $genitive_project_noun .  '.', 500);
+                        return response()->json('Es gab einen unbekannten Fehler.', 500);
                     }
                 } else {
                     return response()->json('Es gab einen Fehler beim Löschen der Nachrichten ' . $genitive_project_noun .  '.', 500);
@@ -414,18 +408,16 @@ class AdminsController extends Controller
                     if ($project->image != null && $project->image != '') {
                         Storage::delete('public/images/'. $project->image);
                     }
-                    // unset($project->participants);
-                    // return new ProjectResource($project);
                     return response()->json(['message' => $definite_article_project_noun . ' wurde erfolgreich gelöscht.'], 200);
                 } else {
-                    return response()->json('Es gab einen Fehler beim Löschen ' . $genitive_project_noun .  '.', 500);
+                    return response()->json('Es gab einen unbekannten Fehler.', 500);
                 }
             }
         } else if ($project->leader_type === 'App\Student') {
-            if ($project->assistant_student_leaders()->exists()) {          // Beinhaltet auch den Admin
+            if ($project->assistant_student_leaders()->exists()) {
                 $student_leader_assistants = $project->assistant_student_leaders;
             } else {
-                return response()->json($definite_article_project_noun . ' wird von niemandem geleitet.', 500);
+                return response()->json($definite_article_project_noun . ' wird von niemandem geleitet und kann deswegen nicht gelöscht werden.', 500);
             }
 
             $errors = 0;
@@ -451,25 +443,21 @@ class AdminsController extends Controller
                         if ($project->image != null && $project->image != '') {
                             Storage::delete('public/images/'. $project->image);
                         }
-                        // unset($project->participants);
-                        // return new ProjectResource($project);
                         return response()->json(['message' => $definite_article_project_noun . ' wurde erfolgreich gelöscht.'], 200);
                     } else {
-                        return response()->json('Es gab einen Fehler beim Löschen ' . $genitive_project_noun .  '.', 500);
+                        return response()->json('Es gab einen unbekannten Fehler.', 500);
                     }
                 } else {
-                    return response()->json('Es gab einen Fehler beim Löschen der Nachrichten.', 500);
+                    return response()->json('Es gab einen Fehler beim Löschen der Nachrichten ' . $genitive_project_noun . '.', 500);
                 }
             } else {
                 if ($project->delete()) {
                     if ($project->image != null && $project->image != '') {
                         Storage::delete('public/images/'. $project->image);
                     }
-                    // unset($project->participants);
-                    // return new ProjectResource($project);
                     return response()->json(['message' => $definite_article_project_noun . ' wurde erfolgreich gelöscht.'], 200);
                 } else {
-                    return response()->json('Es gab einen Fehler beim Löschen ' . $genitive_project_noun .  '.', 500);
+                    return response()->json('Es gab einen unbekannten Fehler.', 500);
                 }
             }
         }
@@ -493,13 +481,12 @@ class AdminsController extends Controller
             $receiver->exchange_id = 0;
 
             if ($sender->save() && $receiver->save()) {
-                // return new ExchangeResource($exchange);
                 return response()->json(['message' => 'Die Tauschanfrage wurde erfolgreich gelöscht.'], 200);
             } else {
-                return response()->json('Es gab einen Fehler beim Aktualisieren der tauschenden Schüler.', 500);
+                return response()->json('Es gab einen Fehler beim Aktualisieren der Accouts der tauschenden Schüler.', 500);
             }
         } else {
-            return response()->json('Es gab einen Fehler beim Löschen der Tauschanfrage.', 500);
+            return response()->json('Es gab einen unbekannten Fehler.', 500);
         }
     }
 }

@@ -19,7 +19,7 @@ class LoginController extends Controller
         $creds = $request->only(['email', 'password']);
 
         if (!$token = auth()->guard('admins')->attempt($creds)) {
-            return response()->json('E-Mail und Passwort stimmen nicht überein!', 401);
+            return response()->json('E-Mail und Passwort stimmen nicht überein.', 401);
         }
 
         $user = auth('admins')->user();
