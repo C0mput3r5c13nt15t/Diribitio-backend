@@ -23,7 +23,7 @@ class SortStudentsController extends Controller
 
     private function get_all_projects()
     {
-        $projects = Project::get(['id','title', 'leader_id', 'leader_name', 'leader_type', 'min_grade', 'max_grade', 'min_participants', 'max_participants']);
+        $projects = Project::get(['id','title', 'leader_id', 'leader_name', 'leader_type', 'min_grade', 'max_grade', 'min_participants', 'max_participants'])->where('authorized', 1);
 
         $projects->each(function ($project) {
             $project->leader_assistants = [];
@@ -67,6 +67,17 @@ class SortStudentsController extends Controller
         });
 
         return $students;
+    }
+
+    private function check_students() {
+        #echo "Überprüfen, ob alle Schüler Projektwünsche haben\n"
+        $this->all_students->each(function ($student, $key) {
+            if ($student->first_wish == 0 || $student->second_wish == 0 || $student->third_wish == 0) {
+                $this->impossible_students = array_merge($this->impossible_students, [$student]);
+                $this->all_students->forget($key);
+                #echo "-------> " . $student->first_name . "hat mindestends einen üngültigen Wunsch\n";
+            }
+        });
     }
 
     private function get_project($project_id) {
@@ -237,7 +248,7 @@ class SortStudentsController extends Controller
                 if (!$this->get_project($student->third_wish)) {
                     #echo "----> " . $student->first_name . "s 3. Wunsch (" . $student->third_wish. ") findet nicht statt\n";
                     $this->impossible_students = array_merge($this->impossible_students, [$student]);
-                    $this->all_students->forget($key);
+                    $this->all_students->forget($this->get_student_key($student_id));
                     #echo "-----> " . $student->first_name . " kann nicht zugeordnet werden\n";
                 } else {
                     $student->first_wish = $student->third_wish;
@@ -432,6 +443,8 @@ class SortStudentsController extends Controller
                     }
                 }
             });
+
+            $this->check_students();
 
             #echo "Projekte die nicht stattfinden können werden gelöscht\n";
 
