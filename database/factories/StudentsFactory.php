@@ -19,9 +19,9 @@ $factory->define(App\Student::class, function (Faker $faker) {
         'first_friend' => 0,
         'second_friend' => 0,
         'third_friend' => 0,
-        'first_wish' => $faker->numberBetween(1, 20),
-        'second_wish' => $faker->numberBetween(1, 20),
-        'third_wish' => $faker->numberBetween(1, 20),
+        'first_wish' => $faker->numberBetween(1, 19),
+        'second_wish' => $faker->numberBetween(1, 19),
+        'third_wish' => $faker->numberBetween(1, 19),
         'project_id' => 0,
         'role' => 1,
     ];

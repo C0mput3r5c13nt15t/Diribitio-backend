@@ -23,7 +23,7 @@ class SortStudentsController extends Controller
 
     private function get_all_projects()
     {
-        $projects = Project::get(['id','title', 'leader_id', 'leader_name', 'leader_type', 'min_grade', 'max_grade', 'min_participants', 'max_participants'])->where('authorized', 1);
+        $projects = Project::get(['id', 'authorized','title', 'leader_id', 'leader_name', 'leader_type', 'min_grade', 'max_grade', 'min_participants', 'max_participants']);
 
         $projects->each(function ($project) {
             $project->leader_assistants = [];
@@ -69,13 +69,61 @@ class SortStudentsController extends Controller
         return $students;
     }
 
+    private function check_projects() {
+        #echo "Überprüft, ob alle Projekte zugelassen sind\n"
+        $this->all_projects->each(function ($project, $key) {
+            if ($project->authorized == 0) {
+                $this->all_projects->forget($key);
+
+                if ($project->leader_type === 'App\Student') {
+                    if ($project->leader_id) {
+                        $this->get_student($project->leader_id)->role = 1;
+                        if ($this->get_project($this->get_student($project->leader_id)->first_wish)) {
+                            $this->append_student_to_project($this->get_student($project->leader_id)->first_wish, $project->leader_id);
+                        } else {
+                            $this->get_student($project->leader_id)->first_wish = $this->get_student($project->leader_id)->second_wish;
+
+                            if ($this->get_project($this->get_student($project->leader_id)->second_wish)) {
+                                $this->append_student_to_project($this->get_student($project->leader_id)->second_wish, $project->leader_id);
+                            } else {
+                                $this->get_student($project->leader_id)->first_wish = $this->get_student($project->leader_id)->third_wish;
+                                $this->get_student($project->leader_id)->second_wish = $this->get_student($project->leader_id)->third_wish;
+
+                                if ($this->get_project($this->get_student($project->leader_id)->third_wish)) {
+                                    $this->append_student_to_project($this->get_student($project->leader_id)->third_wish, $project->leader_id);
+                                } else {
+                                    $this->impossible_students = array_merge($this->impossible_students, [$this->get_student($project->leader_id)]);
+                                    $this->all_students->forget($this->get_student_key($project->leader_id));
+                                }
+                            }
+                        }
+                    }
+
+                    foreach ($project->leader_assistants as $leader_assistant_id) {
+                        $this->get_student($leader_assistant_id)->role = 1;
+                        $this->append_student_to_project($this->get_student($leader_assistant_id)->first_wish, $leader_assistant_id);
+                    }
+                }
+            }
+        });
+    }
+
     private function check_students() {
-        #echo "Überprüfen, ob alle Schüler Projektwünsche haben\n"
+        #echo "Überprüft, ob alle Schüler Projektwünsche haben\n"
         $this->all_students->each(function ($student, $key) {
-            if ($student->first_wish == 0 || $student->second_wish == 0 || $student->third_wish == 0) {
-                $this->impossible_students = array_merge($this->impossible_students, [$student]);
-                $this->all_students->forget($key);
-                #echo "-------> " . $student->first_name . "hat mindestends einen üngültigen Wunsch\n";
+            #echo "-> " . $student->first_name . " wird überprüft\n";
+            if ($student->role == 1) {
+                if ($student->first_wish == 0 || $student->second_wish == 0 || $student->third_wish == 0) {
+                    #echo "-> " . $student->first_name . " hat mindestends einen üngültigen Wunsch\n";
+                    $this->impossible_students = array_merge($this->impossible_students, [$student]);
+                    $this->all_students->forget($key);
+                    #echo "-> " . $student->first_name . " kann nich zugeordnet werden\n";
+                } else if (!$this->get_project($student->first_wish) || !$this->get_project($student->second_wish) || !$this->get_project($student->third_wish)) {
+                    #echo "-> " . $student->first_name . " hat mindestends einen üngültigen Wunsch\n";
+                    $this->impossible_students = array_merge($this->impossible_students, [$student]);
+                    $this->all_students->forget($key);
+                    #echo "-> " . $student->first_name . " kann nich zugeordnet werden\n";
+                }
             }
         });
     }
@@ -430,6 +478,9 @@ class SortStudentsController extends Controller
         #echo "Freundschaften werden überprüft und Wünsche gleich gesetzt\n";
 
         if ($sort === true) {
+            $this->check_projects();
+            $this->check_students();
+
             $this->all_students->each(function ($student, $key) {
                 foreach ($student->friends as $friend_id) {
                     $friend = $this->get_student($friend_id);
@@ -443,8 +494,6 @@ class SortStudentsController extends Controller
                     }
                 }
             });
-
-            $this->check_students();
 
             #echo "Projekte die nicht stattfinden können werden gelöscht\n";
 
