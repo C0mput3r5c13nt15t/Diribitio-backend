@@ -793,7 +793,7 @@ class SortStudentsController extends Controller
                     $project->title = $project->title . ' (findet nicht statt)';
                     $project->descr = 'Es tut uns leid ihnen mitteilen zu müssen, dass ihr Projekt auf Grund eines Mangels an interessierten Teilnehmern nicht stattfinden kann.';
 
-                    $leader->leaded_project()->save($project);
+                    $project->save();
                 }
 
                 if ($project->leader_type === 'App\Student') {
