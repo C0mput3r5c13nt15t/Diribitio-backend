@@ -697,7 +697,7 @@ class SortStudentsController extends Controller
                                 }
                             }
                         }
-                    /* } else if (count($project->participants) <= 0) {            // Hat das Projekt überhaupt Teilnehmer?
+                    } /* else if (count($project->participants) <= 0) {            // Hat das Projekt überhaupt Teilnehmer?
                         echo "\n" . $project->title . " hat keine Teilnehmer\n";
                         echo "-> ";
                         $this->move_participants_and_leaders($project, $key);
