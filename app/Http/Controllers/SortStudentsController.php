@@ -616,7 +616,7 @@ class SortStudentsController extends Controller
                 echo "\n----------" . ($max_tries - $tries) . " Durchlauf----------\n";
 
                 $this->all_projects->each(function ($project, $key) {
-                    if (count($project->participants) < $project->min_participants && count($project->participants)) {       // Hat das Projekt zu wenig Teilnehmer?
+                    if (count($project->participants) < $project->min_participants) {       // Hat das Projekt zu wenig Teilnehmer?
                         echo "\n" . $project->title . " (" . $project->id . ") nur " . count($project->participants) . " von " . $project->min_participants . " Teilnehmern\n";
                         $donor_participants = [];
                         $donor_projects = [];
@@ -664,7 +664,7 @@ class SortStudentsController extends Controller
                     } else if (count($project->participants) > $project->max_participants) {           // Hat das Projekt zu viele Teilnehmer?
                         echo "\n" . $project->title . " (" . $project->id . ") hat " . count($project->participants) . " von " . $project->max_participants . " Teilnehmern\n";
                         foreach ($project->participants as $participant_id) {
-                            echo $this->get_student($participant_id) . "\n";
+                            # echo $this->get_student($participant_id) . "\n";
                             if (count($project->participants) > $project->max_participants) {
                                 $participant = $this->get_student($participant_id);
                                 if (count($this->get_project($participant->first_wish)->participants) - count($participant->friends) < $this->get_project($participant->first_wish)->max_participants) {
@@ -697,13 +697,13 @@ class SortStudentsController extends Controller
                                 }
                             }
                         }
-                    } else if (count($project->participants) <= 0) {            // Hat das Projekt überhaupt Teilnehmer?
+                    /* } else if (count($project->participants) <= 0) {            // Hat das Projekt überhaupt Teilnehmer?
                         echo "\n" . $project->title . " hat keine Teilnehmer\n";
                         echo "-> ";
                         $this->move_participants_and_leaders($project, $key);
                         echo "-> ";
                         $this->delete_project($project, $key);
-                    }
+                    } */
                 });
 
                 $solved = $this->check_solved();
