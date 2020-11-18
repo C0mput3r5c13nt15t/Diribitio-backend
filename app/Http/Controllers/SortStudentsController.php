@@ -70,7 +70,7 @@ class SortStudentsController extends Controller
     }
 
     private function check_projects() {
-        echo "Überprüft, ob alle Projekte zugelassen sind\n"
+        echo "Überprüft, ob alle Projekte zugelassen sind\n";
         $this->all_projects->each(function ($project, $key) {
             if ($project->authorized == 0) {
                 $this->all_projects->forget($key);
@@ -109,7 +109,7 @@ class SortStudentsController extends Controller
     }
 
     private function check_students() {
-        echo "Überprüft, ob alle Schüler Projektwünsche haben\n"
+        echo "Überprüft, ob alle Schüler Projektwünsche haben\n";
         $this->all_students->each(function ($student, $key) {
             echo "-> " . $student->first_name . " wird überprüft\n";
             if ($student->role == 1) {
