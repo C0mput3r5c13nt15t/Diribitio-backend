@@ -799,16 +799,16 @@ class SortStudentsController extends Controller
 
                 if ($messages->exists()) {
                     if ($messages->delete()) {
-                        if ($project->delete()) {
-                            if ($project->image != null && $project->image != '') {
-                                Storage::delete('public/images/'. $project->image);
+                        if ($project_object->delete()) {
+                            if ($project_object->image != null && $project_object->image != '') {
+                                Storage::delete('public/images/'. $project_object->image);
                             }
                         }
                     }
                 } else {
-                    if ($project->delete()) {
-                        if ($project->image != null && $project->image != '') {
-                            Storage::delete('public/images/'. $project->image);
+                    if ($project_object->delete()) {
+                        if ($project_object->image != null && $project_object->image != '') {
+                            Storage::delete('public/images/'. $project_object->image);
                         }
                     }
                 }
