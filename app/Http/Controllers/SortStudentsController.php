@@ -353,6 +353,10 @@ class SortStudentsController extends Controller
         $project->assistant_student_leaders = [];
         $this->all_projects->forget($key);
 
+        $this->all_students->each(function ($student, $key) {
+            $this->check_wishes($student->id);
+        });
+
         if ($project->leader_type != "App\Student") {
             $this->deleted_projects = $this->deleted_projects->push($project);
         }
