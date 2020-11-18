@@ -789,7 +789,7 @@ class SortStudentsController extends Controller
                 });
             } else {
                 if (Project::findOrFail($project->id)->leader()->exists()) {
-                    $leader->notify(new ProjectHasNotEnoughParticipants($invoice));
+                    Project::findOrFail($project->id)->leader()->notify(new ProjectHasNotEnoughParticipants($invoice));
                 }
 
                 if ($messages->exists()) {
