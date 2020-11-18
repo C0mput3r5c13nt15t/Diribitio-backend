@@ -13,6 +13,7 @@ use App\Http\Resources\LimitedStudent as LimitedStudentResource;
 use App\Http\Resources\Leader as LeaderResource;
 use App\Http\Resources\LimitedLeader as LimitedLeaderResource;
 use App\Http\Resources\Project as ProjectResource;
+use App\Notifications\ProjectHasNotEnoughParticipants;
 
 class SortStudentsController extends Controller
 {
@@ -787,29 +788,22 @@ class SortStudentsController extends Controller
                     $student->save();
                 });
             } else {
-                if ($project->leader_type === 'App\Leader') {
-                    $leader = $project->leader;
-
-                    $project->title = $project->title . ' (findet nicht statt)';
-                    $project->descr = 'Es tut uns leid ihnen mitteilen zu müssen, dass ihr Projekt auf Grund eines Mangels an interessierten Teilnehmern nicht stattfinden kann.';
-
-                    $project->save();
+                if ($project->leader()->exists()) {
+                    $leader->notify(new ProjectHasNotEnoughParticipants($invoice));
                 }
 
-                if ($project->leader_type === 'App\Student') {
-                    if ($messages->exists()) {
-                        if ($messages->delete()) {
-                            if ($project->delete()) {
-                                if ($project->image != null && $project->image != '') {
-                                    Storage::delete('public/images/'. $project->image);
-                                }
-                            }
-                        }
-                    } else {
+                if ($messages->exists()) {
+                    if ($messages->delete()) {
                         if ($project->delete()) {
                             if ($project->image != null && $project->image != '') {
                                 Storage::delete('public/images/'. $project->image);
                             }
+                        }
+                    }
+                } else {
+                    if ($project->delete()) {
+                        if ($project->image != null && $project->image != '') {
+                            Storage::delete('public/images/'. $project->image);
                         }
                     }
                 }
