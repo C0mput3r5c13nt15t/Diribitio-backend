@@ -787,7 +787,7 @@ class SortStudentsController extends Controller
 
                     $student->save();
                 });
-            } else if (Project::findOrFail($project->id)->leader_id != 0) {
+            } else if (Project::find($project->id)) {
                 $project_object = Project::findOrFail($project->id);
                 $leader = $project_object->leader();
 
