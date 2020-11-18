@@ -789,9 +789,9 @@ class SortStudentsController extends Controller
                 });
             } else if (Project::find($project->id)) {
                 $project_object = Project::findOrFail($project->id);
-                $leader = $project_object->leader();
+                $leader = $project_object->leader;
 
-                if ($leader->exists()) {
+                if ($leader) {
                     $leader->notify(new ProjectHasNotEnoughParticipants());
                     if ($project_object->leader_type === 'App\Leader') {
                         $leader->project_id = 0;
