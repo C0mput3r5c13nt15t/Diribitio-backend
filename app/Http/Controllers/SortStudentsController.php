@@ -788,9 +788,14 @@ class SortStudentsController extends Controller
                     $student->save();
                 });
             } else {
-                if (Project::findOrFail($project->id)->leader()->exists()) {
-                    Project::findOrFail($project->id)->leader()->notify(new ProjectHasNotEnoughParticipants());
+                $project_object = Project::findOrFail($project->id);
+                $leader = $project_object->leader();
+
+                if ($leader->exists()) {
+                    $leader->notify(new ProjectHasNotEnoughParticipants());
                 }
+
+                $messages = $project_object->messages();
 
                 if ($messages->exists()) {
                     if ($messages->delete()) {
