@@ -18,7 +18,7 @@ use App\Http\Resources\Message as MessageResource;
 class StudentsController extends Controller
 {
     /**
-     * Display the student associated to the provided first_name, last_name, grade and letter.
+     * Display the student associated with the provided first_name, last_name, grade and letter.
      *
      * @return \Illuminate\Http\Response
      */
@@ -40,7 +40,7 @@ class StudentsController extends Controller
     }
 
     /**
-     * Display the student associated to the provided token.
+     * Display the student associated with the provided token.
      *
      * @return \Illuminate\Http\Response
      */
@@ -52,7 +52,7 @@ class StudentsController extends Controller
     }
 
     /**
-     * Display the friends associated to the student associated to the provided token.
+     * Display the friends associated with the student associated with the provided token.
      *
      * @return \Illuminate\Http\Response
      */
@@ -67,7 +67,7 @@ class StudentsController extends Controller
 
 
     /**
-     * Display the exchange associated to the student associated to the provided token.
+     * Display the exchange associated with the student associated with the provided token.
      *
      * @return \Illuminate\Http\Response
      */
@@ -85,7 +85,7 @@ class StudentsController extends Controller
     }
 
     /**
-     * Display the sender of the exchange associated to the student associated to the provided token.
+     * Display the sender of the exchange associated with the student associated with the provided token.
      *
      * @return \Illuminate\Http\Response
      */
@@ -103,7 +103,7 @@ class StudentsController extends Controller
     }
 
     /**
-     * Display the receiver of the exchange associated to the student associated to the provided token.
+     * Display the receiver of the exchange associated with the student associated with the provided token.
      *
      * @return \Illuminate\Http\Response
      */
@@ -121,7 +121,7 @@ class StudentsController extends Controller
     }
 
     /**
-     * Display the exchange requests associated to the student associated to the provided token.
+     * Display the exchange requests associated with the student associated with the provided token.
      *
      * @return \Illuminate\Http\Response
      */
@@ -142,7 +142,7 @@ class StudentsController extends Controller
     }
 
     /**
-     * Display the project associated to the student associated to the provided token.
+     * Display the project associated with the student associated with the provided token.
      *
      * @return \Illuminate\Http\Response
      */
@@ -181,7 +181,7 @@ class StudentsController extends Controller
     }
 
     /**
-     * Display the project associated to the leader of type student associated to the provided token.
+     * Display the project associated with the leader of type student associated with the provided token.
      *
      * @return \Illuminate\Http\Response
      */
@@ -236,7 +236,7 @@ class StudentsController extends Controller
     }
 
     /**
-     * Store a newly created exchange and assign the student associated to the provided token to it.
+     * Store a newly created exchange and assign the student associated with the provided token to it.
      *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
@@ -296,7 +296,7 @@ class StudentsController extends Controller
     }
 
     /**
-     * Store a newly created project in storage and assign the student associated to the provided token to it.
+     * Store a newly created project in storage and assign the student associated with the provided token to it.
      *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
@@ -396,7 +396,7 @@ class StudentsController extends Controller
     }
 
     /**
-     * Store a newly created message and assign it to the project associated to the leader of type student associated to the provided token.
+     * Store a newly created message and assign it to the project associated with the leader of type student associated with the provided token.
      *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
@@ -447,7 +447,7 @@ class StudentsController extends Controller
     }
 
     /**
-     * Update the student associated to the provided token.
+     * Update the student associated with the provided token.
      *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
@@ -528,7 +528,7 @@ class StudentsController extends Controller
     }
 
     /**
-     * Suspend the student associated to the provided token from leader assistant.
+     * Suspend the student associated with the provided token from leader assistant.
      *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
@@ -592,7 +592,7 @@ class StudentsController extends Controller
     }
 
     /**
-     * Confirm the specific exchange associated to the receiver of type student associated to the provided token.
+     * Confirm the specific exchange associated with the receiver of type student associated with the provided token.
      *
      * @param  int  $id
      * @return \Illuminate\Http\Response
@@ -638,7 +638,7 @@ class StudentsController extends Controller
     }
 
     /**
-     * Update the project associated to the leader of type student associated to the provided token.
+     * Update the project associated with the leader of type student associated with the provided token.
      *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
@@ -706,7 +706,7 @@ class StudentsController extends Controller
     }
 
     /**
-     * Update the project associated to the leader of type student associated to the provided token outside the normal time frame with admin authorization.
+     * Update the project associated with the leader of type student associated with the provided token outside the normal time frame with admin authorization.
      *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
@@ -773,7 +773,7 @@ class StudentsController extends Controller
     }
 
     /**
-     * Destroy the specific exchange associated to the student associated to the provided token and if needed update the other student associated to that exchange.
+     * Destroy the specific exchange associated with the student associated with the provided token and if needed update the other student associated with that exchange.
      *
      * @return \Illuminate\Http\Response
      */
@@ -819,7 +819,7 @@ class StudentsController extends Controller
     }
 
     /**
-     * Remove the specified message from the project associated to the leader of type student associated to the provided token.
+     * Remove the specified message from the project associated with the leader of type student associated with the provided token.
      *
      * @param  int  $id
      * @return \Illuminate\Http\Response

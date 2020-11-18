@@ -771,15 +771,41 @@ class SortStudentsController extends Controller
             $project = (object) $item;
             $participants = collect($project->participants);
 
-            $participants->each(function ($item) use ($project) {
-                $participant = (object) $item;
-                $student = Student::findOrFail($participant->id);
+            if ($participants->count() > 0) {
+                $participants->each(function ($item) use ($project) {
+                    $participant = (object) $item;
+                    $student = Student::findOrFail($participant->id);
 
-                $student->role = 1;
-                $student->project_id = $project->id;
+                    $student->role = 1;
+                    $student->project_id = $project->id;
 
-                $student->save();
-            });
+                    $student->save();
+                });
+            } else {
+                if ($project->leader_type === 'App\Leader') {
+                    $leader = $project->leader;
+
+                    $project->title = $project->title . ' (findet nicht statt)';
+                    $project->descr = 'Es tut uns leid ihnen mitteilen zu müssen, dass ihr Projekt auf Grund eines Mangels an interessierten Teilnehmern nicht stattfinden kann.';
+
+                    $leader->leaded_project()->save($project);
+                }
+
+                if ($project->leader_type === 'App\Student') {
+                    if ($messages->exists()) {
+                        if ($messages->delete()) {
+                            if ($project->delete()) {
+                                if ($project->image != null && $project->image != '') {
+                                    Storage::delete('public/images/'. $project->image);
+                                }
+                    } else {
+                        if ($project->delete()) {
+                            if ($project->image != null && $project->image != '') {
+                                Storage::delete('public/images/'. $project->image);
+                            }
+                    }
+                }
+            }
         });
 
         Storage::disk('local')->delete('private/temp-data-storage/data.json');

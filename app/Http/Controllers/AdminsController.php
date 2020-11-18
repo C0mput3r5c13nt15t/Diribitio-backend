@@ -197,7 +197,7 @@ class AdminsController extends Controller
     }
 
     /**
-     * Display the admin associated to the provided token.
+     * Display the admin associated with the provided token.
      *
      * @param  int  $id
      * @return \Illuminate\Http\Response

@@ -67,7 +67,7 @@ class RegisterController extends Controller
                     return response()->json('Es gab einen unbekannten Fehler.', 500);
                 }
             } catch (\Illuminate\Database\QueryException $e) {
-                return response()->json('Scheinbar ist der Benutzername bereits vergeben.', 500);
+                return response()->json('Scheinbar ist der Benutzername oder die E-Mail bereits vergeben.', 500);
             }
         } else {
             return response()->json('Diese E-Mail ist bereits vergeben.', 400);

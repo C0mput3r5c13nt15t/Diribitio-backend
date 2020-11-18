@@ -13,17 +13,15 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        // Admin erstellen
+        // Allows the masteradmin to craete an account
 
-        DB::table('admins')->insert([
-            'user_name' => 'Masteradmin',
-            'email' => 'pauljustus27@gmail.com',
-            'email_verified_at' => Carbon::now(),
-            'password' => bcrypt('Passwort'),
+        DB::table('sign_up_emails')->insert([
+            'email' => 'masteradmin@yourschool.onmicrosoft.com',
+            'created_by' => '0',
         ]);
 
 
-        // Zeitplan erstellen
+        // Creates a basic schedule with one day interwalls starting the day after creation
 
         DB::table('schedule')->insert([
             'begin' => Carbon::now(),
@@ -36,7 +34,7 @@ class DatabaseSeeder extends Seeder
         ]);
 
 
-        // Projekte, Schüler und Projektleiter erstellen, falls die App noch in Entwicklung ist
+        // If in development this generates test students, leaders and projects
 
         if (App::environment('local')) {
             $this->call(StudentsTableSeeder::class);

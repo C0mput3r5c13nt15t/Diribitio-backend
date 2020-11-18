@@ -16,7 +16,7 @@ use App\Http\Resources\Message as MessageResource;
 class LeadersController extends Controller
 {
     /**
-     * Display the leader associated to the provided token.
+     * Display the leader associated with the provided token.
      *
      * @param  int  $id
      * @return \Illuminate\Http\Response
@@ -29,7 +29,7 @@ class LeadersController extends Controller
     }
 
     /**
-     * Display the leader associated to the provided token.
+     * Display the leader associated with the provided token.
      *
      * @param  int  $id
      * @return \Illuminate\Http\Response
@@ -57,7 +57,7 @@ class LeadersController extends Controller
     }
 
     /**
-     * Store a newly created message and assign it to the project associated to the leader associated to the provided token.
+     * Store a newly created message and assign it to the project associated with the leader associated with the provided token.
      *
      * @param  int  $id
      * @return \Illuminate\Http\Response
@@ -91,7 +91,7 @@ class LeadersController extends Controller
     }
 
     /**
-     * Store a newly created project and assign the leader associated to the provided tokenb to it.
+     * Store a newly created project and assign the leader associated with the provided tokenb to it.
      *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
@@ -186,7 +186,7 @@ class LeadersController extends Controller
     }
 
     /**
-     * Update the project associated to the leader associated to the provided token.
+     * Update the project associated with the leader associated with the provided token.
      *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
@@ -244,7 +244,7 @@ class LeadersController extends Controller
     }
 
     /**
-     * Update the project associated to the leader associated to the provided token outside the normal time frame with admin authorization.
+     * Update the project associated with the leader associated with the provided token outside the normal time frame with admin authorization.
      *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
@@ -307,7 +307,7 @@ class LeadersController extends Controller
     }
 
     /**
-     * Remove the specified message from the project associated to the leader associated to the provided token.
+     * Remove the specified message from the project associated with the leader associated with the provided token.
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  int  $id
