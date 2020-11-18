@@ -70,7 +70,7 @@ class SortStudentsController extends Controller
     }
 
     private function check_projects() {
-        echo "Überprüft, ob alle Projekte zugelassen sind\n";
+        #echo "Überprüft, ob alle Projekte zugelassen sind\n";
         $this->all_projects->each(function ($project, $key) {
             if ($project->authorized == 0) {
                 $this->all_projects->forget($key);
@@ -109,20 +109,20 @@ class SortStudentsController extends Controller
     }
 
     private function check_students() {
-        echo "Überprüft, ob alle Schüler Projektwünsche haben\n";
+        #echo "Überprüft, ob alle Schüler Projektwünsche haben\n";
         $this->all_students->each(function ($student, $key) {
-            echo "-> " . $student->first_name . " wird überprüft\n";
+            #echo "-> " . $student->first_name . " wird überprüft\n";
             if ($student->role == 1) {
                 if ($student->first_wish == 0 || $student->second_wish == 0 || $student->third_wish == 0) {
-                    echo "-> " . $student->first_name . " hat mindestends einen üngültigen Wunsch\n";
+                    #echo "-> " . $student->first_name . " hat mindestends einen üngültigen Wunsch\n";
                     $this->impossible_students = array_merge($this->impossible_students, [$student]);
                     $this->all_students->forget($key);
-                    echo "-> " . $student->first_name . " kann nich zugeordnet werden\n";
+                    #echo "-> " . $student->first_name . " kann nich zugeordnet werden\n";
                 } else if (!$this->get_project($student->first_wish) || !$this->get_project($student->second_wish) || !$this->get_project($student->third_wish)) {
-                    echo "-> " . $student->first_name . " hat mindestends einen üngültigen Wunsch\n";
+                    #echo "-> " . $student->first_name . " hat mindestends einen üngültigen Wunsch\n";
                     $this->impossible_students = array_merge($this->impossible_students, [$student]);
                     $this->all_students->forget($key);
-                    echo "-> " . $student->first_name . " kann nich zugeordnet werden\n";
+                    #echo "-> " . $student->first_name . " kann nich zugeordnet werden\n";
                 }
             }
         });
@@ -185,69 +185,69 @@ class SortStudentsController extends Controller
     }
 
     private function move_participants_and_leaders($project, $key) {
-        echo "Verschiebung der Schüler in andere Projekte\n";
+        #echo "Verschiebung der Schüler in andere Projekte\n";
         $this->all_projects->forget($key);
 
         foreach ($project->participants as $former_participant_id) {
             $former_participant = $this->get_student($former_participant_id);
             if ($former_participant->first_wish == $project->id) {
-                echo "----> " . $former_participant->first_name . " " . $former_participant->last_name . " wäre ein Teilnehmer von " . $project->id . " gewesen (1.Wunsch)\n";
+                #echo "----> " . $former_participant->first_name . " " . $former_participant->last_name . " wäre ein Teilnehmer von " . $project->id . " gewesen (1.Wunsch)\n";
                 if (!$this->get_project($former_participant->second_wish)) {
-                    echo "-----> " . $former_participant->first_name . "s 2. Wunsch (" . $former_participant->second_wish. ") findet nicht statt\n";
+                    #echo "-----> " . $former_participant->first_name . "s 2. Wunsch (" . $former_participant->second_wish. ") findet nicht statt\n";
                     if (!$this->get_project($former_participant->third_wish)) {
-                        echo "------> " . $former_participant->first_name . "s 3. Wunsch (" . $former_participant->third_wish. ") findet nicht statt\n";
+                        #echo "------> " . $former_participant->first_name . "s 3. Wunsch (" . $former_participant->third_wish. ") findet nicht statt\n";
                         $this->impossible_students = array_merge($this->impossible_students, [$former_participant]);
                         $this->all_students->forget($this->get_student_key($former_participant->id));
-                        echo "-------> " . $former_participant->first_name . "kann nicht zugeordnet werden\n";
+                        #echo "-------> " . $former_participant->first_name . "kann nicht zugeordnet werden\n";
                     } else {
                         $former_participant->first_wish = $former_participant->third_wish;
                         $former_participant->second_wish = $former_participant->third_wish;
-                        echo "------> " . $former_participant->first_name . "s 1. und 2. Wunsch ist jetzt " . $former_participant->second_wish . "\n";
+                        #echo "------> " . $former_participant->first_name . "s 1. und 2. Wunsch ist jetzt " . $former_participant->second_wish . "\n";
                         $this->append_student_to_project($former_participant->first_wish, $former_participant->id);
                     }
                 } else {
                     $former_participant->first_wish = $former_participant->second_wish;
-                    echo "-----> " . $former_participant->first_name . "s 1. Wunsch ist jetzt " . $former_participant->second_wish . "\n";
+                    #echo "-----> " . $former_participant->first_name . "s 1. Wunsch ist jetzt " . $former_participant->second_wish . "\n";
                     $this->append_student_to_project($former_participant->first_wish, $former_participant->id);
                 }
             } elseif ($former_participant->second_wish == $project->id) {
-                echo "----> " . $former_participant->first_name . " " . $former_participant->last_name . " wäre ein Teilnehmer von " . $project->id . " gewesen (2.Wunsch)\n";
+                #echo "----> " . $former_participant->first_name . " " . $former_participant->last_name . " wäre ein Teilnehmer von " . $project->id . " gewesen (2.Wunsch)\n";
                 if (!$this->get_project($former_participant->third_wish)) {
-                    echo "-----> " . $former_participant->first_name . "s 3. Wunsch (" . $former_participant->third_wish. ") findet nicht statt\n";
+                    #echo "-----> " . $former_participant->first_name . "s 3. Wunsch (" . $former_participant->third_wish. ") findet nicht statt\n";
                     if (!$this->get_project($former_participant->first_wish)) {
-                        echo "------> " . $former_participant->first_name . "s 1. Wunsch (" . $former_participant->first_wish. ") findet nicht statt\n";
+                        #echo "------> " . $former_participant->first_name . "s 1. Wunsch (" . $former_participant->first_wish. ") findet nicht statt\n";
                         $this->impossible_students = array_merge($this->impossible_students, [$former_participant]);
                         $this->all_students->forget($this->get_student_key($former_participant->id));
-                        echo "-------> " . $former_participant->first_name . "kann nicht zugeordnet werden\n";
+                        #echo "-------> " . $former_participant->first_name . "kann nicht zugeordnet werden\n";
                     } else {
                         $former_participant->second_wish = $former_participant->first_wish;
                         $former_participant->third_wish = $former_participant->first_wish;
-                        echo "------> " . $former_participant->first_name . "s 2. und 3. Wunsch ist jetzt " . $former_participant->first_wish . "\n";
+                        #echo "------> " . $former_participant->first_name . "s 2. und 3. Wunsch ist jetzt " . $former_participant->first_wish . "\n";
                         $this->append_student_to_project($former_participant->first_wish, $former_participant->id);
                     }
                 } else {
                     $former_participant->second_wish = $former_participant->third_wish;
-                    echo "-----> " . $former_participant->first_name . "s 2. Wunsch ist jetzt " . $student->third_wish . "\n";
+                    #echo "-----> " . $former_participant->first_name . "s 2. Wunsch ist jetzt " . $student->third_wish . "\n";
                     $this->append_student_to_project($former_participant->first_wish, $former_participant->id);
                 }
             } elseif ($former_participant->third_wish == $project->id) {
-                echo "----> " . $former_participant->first_name . " " . $former_participant->last_name . " wäre ein Teilnehmer von " . $project->id . " gewesen (3.Wunsch)\n";
+                #echo "----> " . $former_participant->first_name . " " . $former_participant->last_name . " wäre ein Teilnehmer von " . $project->id . " gewesen (3.Wunsch)\n";
                 if (!$this->get_project($former_participant->first_wish)) {
-                    echo "-----> " . $former_participant->first_name . "s 1. Wunsch (" . $former_participant->first_wish. ") findet nicht statt\n";
+                    #echo "-----> " . $former_participant->first_name . "s 1. Wunsch (" . $former_participant->first_wish. ") findet nicht statt\n";
                     if (!$this->get_project($former_participant->second_wish)) {
-                        echo "------> " . $former_participant->first_name . "s 2. Wunsch (" . $former_participant->second_wish. ") findet nicht statt\n";
+                        #echo "------> " . $former_participant->first_name . "s 2. Wunsch (" . $former_participant->second_wish. ") findet nicht statt\n";
                         $this->impossible_students = array_merge($this->impossible_students, [$former_participant]);
                         $this->all_students->forget($this->get_student_key($former_participant->id));
-                        echo "-------> " . $former_participant->first_name . "kann nicht zugeordnet werden\n";
+                        #echo "-------> " . $former_participant->first_name . "kann nicht zugeordnet werden\n";
                     } else {
                         $former_participant->third_wish = $former_participant->second_wish;
                         $former_participant->first_wish = $former_participant->second_wish;
-                        echo "------> " . $former_participant->first_name . "s 3. und 1. Wunsch ist jetzt " . $former_participant->second_wish . "\n";
+                        #echo "------> " . $former_participant->first_name . "s 3. und 1. Wunsch ist jetzt " . $former_participant->second_wish . "\n";
                         $this->append_student_to_project($former_participant->first_wish, $former_participant->id);
                     }
                 } else {
                     $former_participant->third_wish = $former_participant->first_wish;
-                    echo "-----> " . $former_participant->first_name . "s 3. Wunsch ist jetzt " . $former_participant->first_wish . "\n";
+                    #echo "-----> " . $former_participant->first_name . "s 3. Wunsch ist jetzt " . $former_participant->first_wish . "\n";
                     $this->append_student_to_project($former_participant->first_wish, $former_participant->id);
                 }
             }
@@ -290,64 +290,64 @@ class SortStudentsController extends Controller
         }
         $student = $this->get_student($student_id);
         if (!$this->get_project($student->first_wish)) {
-            echo "--> " . $student->first_name . "s 1. Wunsch (" . $student->first_wish. ") findet nicht statt\n";
+            #echo "--> " . $student->first_name . "s 1. Wunsch (" . $student->first_wish. ") findet nicht statt\n";
             if (!$this->get_project($student->second_wish)) {
-                echo "---> " . $student->first_name . "s 2. Wunsch (" . $student->second_wish. ") findet nicht statt\n";
+                #echo "---> " . $student->first_name . "s 2. Wunsch (" . $student->second_wish. ") findet nicht statt\n";
                 if (!$this->get_project($student->third_wish)) {
-                    echo "----> " . $student->first_name . "s 3. Wunsch (" . $student->third_wish. ") findet nicht statt\n";
+                    #echo "----> " . $student->first_name . "s 3. Wunsch (" . $student->third_wish. ") findet nicht statt\n";
                     $this->impossible_students = array_merge($this->impossible_students, [$student]);
                     $this->all_students->forget($this->get_student_key($student_id));
-                    echo "-----> " . $student->first_name . " kann nicht zugeordnet werden\n";
+                    #echo "-----> " . $student->first_name . " kann nicht zugeordnet werden\n";
                 } else {
                     $student->first_wish = $student->third_wish;
                     $student->second_wish = $student->third_wish;
-                    echo "----> " . $student->first_name . "s 1. und 2. Wunsch ist jetzt " . $student->second_wish . "\n";
+                    #echo "----> " . $student->first_name . "s 1. und 2. Wunsch ist jetzt " . $student->second_wish . "\n";
                 }
             } else {
                 $student->first_wish = $student->second_wish;
-                echo "---> " . $student->first_name . "s 1. Wunsch ist jetzt " . $student->second_wish . "\n";
+                #echo "---> " . $student->first_name . "s 1. Wunsch ist jetzt " . $student->second_wish . "\n";
             }
         } elseif (!$this->get_project($student->second_wish)) {
-            echo "--> " . $student->first_name . "s 2. Wunsch (" . $student->second_wish. ") findet nicht statt\n";
+            #echo "--> " . $student->first_name . "s 2. Wunsch (" . $student->second_wish. ") findet nicht statt\n";
             if (!$this->get_project($student->third_wish)) {
-                echo "---> " . $student->first_name . "s 3. Wunsch (" . $student->third_wish. ") findet nicht statt\n";
+                #echo "---> " . $student->first_name . "s 3. Wunsch (" . $student->third_wish. ") findet nicht statt\n";
                 if (!$this->get_project($student->first_wish)) {
-                    echo "----> " . $student->first_name . "s 1. Wunsch (" . $student->first_wish. ") findet nicht statt\n";
+                    #echo "----> " . $student->first_name . "s 1. Wunsch (" . $student->first_wish. ") findet nicht statt\n";
                     $this->impossible_students = array_merge($this->impossible_students, [$student]);
                     $this->all_students->forget($key);
-                    echo "-----> " . $student->first_name . " kann nicht zugeordnet werden\n";
+                    #echo "-----> " . $student->first_name . " kann nicht zugeordnet werden\n";
                 } else {
                     $student->second_wish = $student->first_wish;
                     $student->third_wish = $student->first_wish;
-                    echo "----> " . $student->first_name . "s 2. und 3. Wunsch ist jetzt " . $student->first_wish . "\n";
+                    #echo "----> " . $student->first_name . "s 2. und 3. Wunsch ist jetzt " . $student->first_wish . "\n";
                 }
             } else {
                 $student->second_wish = $student->third_wish;
-                echo "---> " . $student->first_name . "s 2. Wunsch ist jetzt " . $student->third_wish . "\n";
+                #echo "---> " . $student->first_name . "s 2. Wunsch ist jetzt " . $student->third_wish . "\n";
             }
         } elseif (!$this->get_project($student->third_wish)) {
-            echo "--> " . $student->first_name . "s 3. Wunsch (" . $student->third_wish. ") findet nicht statt\n";
+            #echo "--> " . $student->first_name . "s 3. Wunsch (" . $student->third_wish. ") findet nicht statt\n";
             if (!$this->get_project($student->first_wish)) {
-                echo "---> " . $student->first_name . "s 1. Wunsch (" . $student->first_wish. ") findet nicht statt\n";
+                #echo "---> " . $student->first_name . "s 1. Wunsch (" . $student->first_wish. ") findet nicht statt\n";
                 if (!$this->get_project($student->second_wish)) {
-                    echo "----> " . $student->first_name . "s 2. Wunsch (" . $student->second_wish. ") findet nicht statt\n";
+                    #echo "----> " . $student->first_name . "s 2. Wunsch (" . $student->second_wish. ") findet nicht statt\n";
                     $this->impossible_students = array_merge($this->impossible_students, [$student]);
                     $this->all_students->forget($key);
-                    echo "-----> " . $student->first_name . " kann nicht zugeordnet werden\n";
+                    #echo "-----> " . $student->first_name . " kann nicht zugeordnet werden\n";
                 } else {
                     $student->third_wish = $student->second_wish;
                     $student->first_wish = $student->second_wish;
-                    echo "----> " . $student->first_name . "s 3. und 1. Wunsch ist jetzt " . $student->second_wish . "\n";
+                    #echo "----> " . $student->first_name . "s 3. und 1. Wunsch ist jetzt " . $student->second_wish . "\n";
                 }
             } else {
                 $student->third_wish = $student->first_wish;
-                echo "---> " . $student->first_name . "s 3. Wunsch ist jetzt " . $student->first_wish . "\n";
+                #echo "---> " . $student->first_name . "s 3. Wunsch ist jetzt " . $student->first_wish . "\n";
             }
         }
     }
 
     private function delete_project($project, $key) {
-        echo $project->title . " (" . $project->id . ") wurde gelöscht\n";
+        #echo $project->title . " (" . $project->id . ") wurde gelöscht\n";
         $project->participants = [];
         $project->leader = null;
         $project->assistant_student_leaders = [];
@@ -363,29 +363,29 @@ class SortStudentsController extends Controller
     }
 
     private function check_solved() {
-        echo "\nÜberprüfung ob der Vorschlag ausreichend ist\n";
+        #echo "\nÜberprüfung ob der Vorschlag ausreichend ist\n";
         $solved = true;
         $this->all_projects->each(function ($project, $key) use(&$solved){
             if (count($project->participants) > $project->max_participants) {           // Hat das Projekt zu viele Teilnehmer?
                 $solved = false;
-                echo "-> Es gibt noch Projekte mit zu vielen Teilnehmern\n";
+                #echo "-> Es gibt noch Projekte mit zu vielen Teilnehmern\n";
                 return false;
             } else if (count($project->participants) < $project->min_participants && count($project->participants) > 0) {       // Hat das Projekt zu wenig Teilnehmer? (mehr als 0)
                 $solved = false;
-                echo "-> Es gibt noch Projekte mit zu wenigen Teilnehmern\n";
+                #echo "-> Es gibt noch Projekte mit zu wenigen Teilnehmern\n";
                 return false;
             }
         });
 
         if ($solved) {
-        echo "-> Der Sortiervorschlag ist ausreichend\n";
+        #echo "-> Der Sortiervorschlag ist ausreichend\n";
         }
 
         return $solved;
     }
 
     private function format_data($all_projects, $deleted_projects) {
-        echo "Formatierung des Sortiervorschlags\n";
+        #echo "Formatierung des Sortiervorschlags\n";
 
         $this->all_projects->each(function ($project, $key) {
             if ($project->leader_type === 'App\Student') {
@@ -458,7 +458,7 @@ class SortStudentsController extends Controller
      */
     public function create_sorting_proposal()
     {
-        echo "Alle Schüler und Projekte werden aus der Datenbank geladen\n";
+        #echo "Alle Schüler und Projekte werden aus der Datenbank geladen\n";
 
         $this->all_projects = $this->get_all_projects();
         $this->all_students = $this->get_all_students();
@@ -479,7 +479,7 @@ class SortStudentsController extends Controller
 
         // Algorythmus zum Einsortieren der Schüler in die Projekte
 
-        echo "Freundschaften werden überprüft und Wünsche gleich gesetzt\n";
+        #echo "Freundschaften werden überprüft und Wünsche gleich gesetzt\n";
 
         if ($sort === true) {
             $this->check_projects();
@@ -499,7 +499,7 @@ class SortStudentsController extends Controller
                 }
             });
 
-            echo "Projekte die nicht stattfinden können werden gelöscht\n";
+            #echo "Projekte die nicht stattfinden können werden gelöscht\n";
 
             $this->all_projects->each(function ($project, $key) {           // Projekte die nicht genügend Teilnehmer haben KÖNNEN werden gelöscht
                 $max_possible_participants = 0;
@@ -510,65 +510,65 @@ class SortStudentsController extends Controller
                 });
 
                 if ($project->min_participants > $max_possible_participants || $max_possible_participants == 0) {
-                    echo "\n" . $project->title . " (" . $project->id . ") kann nicht sattfinden (" . $max_possible_participants . " von " . $project->min_participants . " Teilnehmern)\n";
+                    #echo "\n" . $project->title . " (" . $project->id . ") kann nicht sattfinden (" . $max_possible_participants . " von " . $project->min_participants . " Teilnehmern)\n";
 
                     $this->delete_project($project, $key);
 
                     if ($max_possible_participants > 0) {
                         $this->all_students->each(function ($student, $key) use($project) {
                             if ($student->first_wish == $project->id) {
-                                echo "-> " . $student->first_name . " " . $student->last_name . " wäre ein Teilnehmer von " . $project->id . " gewesen (1.Wunsch)\n";
+                                #echo "-> " . $student->first_name . " " . $student->last_name . " wäre ein Teilnehmer von " . $project->id . " gewesen (1.Wunsch)\n";
                                 if (!$this->get_project($student->second_wish)) {
-                                    echo "--> " . $student->first_name . "s 2. Wunsch (" . $student->second_wish. ") findet nicht statt\n";
+                                    #echo "--> " . $student->first_name . "s 2. Wunsch (" . $student->second_wish. ") findet nicht statt\n";
                                     if (!$this->get_project($student->third_wish)) {
-                                        echo "---> " . $student->first_name . "s 3. Wunsch (" . $student->third_wish. ") findet nicht statt\n";
+                                        #echo "---> " . $student->first_name . "s 3. Wunsch (" . $student->third_wish. ") findet nicht statt\n";
                                         $this->impossible_students = array_merge($this->impossible_students, [$student]);
                                         $this->all_students->forget($key);
-                                        echo "----> " . $student->first_name . " kann nicht zugeordnet werden\n";
+                                        #echo "----> " . $student->first_name . " kann nicht zugeordnet werden\n";
                                     } else {
                                         $student->first_wish = $student->third_wish;
                                         $student->second_wish = $student->third_wish;
-                                        echo "---> " . $student->first_name . "s 1. und 2. Wunsch ist jetzt " . $student->second_wish . "\n";
+                                        #echo "---> " . $student->first_name . "s 1. und 2. Wunsch ist jetzt " . $student->second_wish . "\n";
                                     }
                                 } else {
                                     $student->first_wish = $student->second_wish;
-                                    echo "--> " . $student->first_name . "s 1. Wunsch ist jetzt " . $student->second_wish . "\n";
+                                    #echo "--> " . $student->first_name . "s 1. Wunsch ist jetzt " . $student->second_wish . "\n";
                                 }
                             } elseif ($student->second_wish == $project->id) {
-                                echo "-> " . $student->first_name . " " . $student->last_name . " wäre ein Teilnehmer von " . $project->id . " gewesen (2.Wunsch)\n";
+                                #echo "-> " . $student->first_name . " " . $student->last_name . " wäre ein Teilnehmer von " . $project->id . " gewesen (2.Wunsch)\n";
                                 if (!$this->get_project($student->third_wish)) {
-                                    echo "--> " . $student->first_name . "s 3. Wunsch (" . $student->third_wish. ") findet nicht statt\n";
+                                    #echo "--> " . $student->first_name . "s 3. Wunsch (" . $student->third_wish. ") findet nicht statt\n";
                                     if (!$this->get_project($student->first_wish)) {
-                                        echo "---> " . $student->first_name . "s 1. Wunsch (" . $student->first_wish. ") findet nicht statt\n";
+                                        #echo "---> " . $student->first_name . "s 1. Wunsch (" . $student->first_wish. ") findet nicht statt\n";
                                         $this->impossible_students = array_merge($this->impossible_students, [$student]);
                                         $this->all_students->forget($this->get_student_key($student->id));
-                                        echo "----> " . $student->first_name . " kann nicht zugeordnet werden\n";
+                                        #echo "----> " . $student->first_name . " kann nicht zugeordnet werden\n";
                                     } else {
                                         $student->second_wish = $student->first_wish;
                                         $student->third_wish = $student->first_wish;
-                                        echo "---> " . $student->first_name . "s 2. und 3. Wunsch ist jetzt " . $student->first_wish . "\n";
+                                        #echo "---> " . $student->first_name . "s 2. und 3. Wunsch ist jetzt " . $student->first_wish . "\n";
                                     }
                                 } else {
                                     $student->second_wish = $student->third_wish;
-                                    echo "--> " . $student->first_name . "s 2. Wunsch ist jetzt " . $student->third_wish . "\n";
+                                    #echo "--> " . $student->first_name . "s 2. Wunsch ist jetzt " . $student->third_wish . "\n";
                                 }
                             } elseif ($student->third_wish == $project->id) {
-                                echo "-> " . $student->first_name . " " . $student->last_name . " wäre ein Teilnehmer von " . $project->id . " gewesen (3.Wunsch)\n";
+                                #echo "-> " . $student->first_name . " " . $student->last_name . " wäre ein Teilnehmer von " . $project->id . " gewesen (3.Wunsch)\n";
                                 if (!$this->get_project($student->first_wish)) {
-                                    echo "--> " . $student->first_name . "s 1. Wunsch (" . $student->first_wish. ") findet nicht statt\n";
+                                    #echo "--> " . $student->first_name . "s 1. Wunsch (" . $student->first_wish. ") findet nicht statt\n";
                                     if (!$this->get_project($student->second_wish)) {
-                                        echo "---> " . $student->first_name . "s 2. Wunsch (" . $student->second_wish. ") findet nicht statt\n";
+                                        #echo "---> " . $student->first_name . "s 2. Wunsch (" . $student->second_wish. ") findet nicht statt\n";
                                         $this->impossible_students = array_merge($this->impossible_students, [$student]);
                                         $this->all_students->forget($this->get_student_key($student->id));
-                                        echo "----> " . $student->first_name . " kann nicht zugeordnet werden\n";
+                                        #echo "----> " . $student->first_name . " kann nicht zugeordnet werden\n";
                                     } else {
                                         $student->third_wish = $student->second_wish;
                                         $student->first_wish = $student->second_wish;
-                                        echo "---> " . $student->first_name . "s 3. und 1. Wunsch ist jetzt " . $student->second_wish . "\n";
+                                        #echo "---> " . $student->first_name . "s 3. und 1. Wunsch ist jetzt " . $student->second_wish . "\n";
                                     }
                                 } else {
                                     $student->third_wish = $student->first_wish;
-                                    echo "--> " . $student->first_name . "s 3. Wunsch ist jetzt " . $student->first_wish . "\n";
+                                    #echo "--> " . $student->first_name . "s 3. Wunsch ist jetzt " . $student->first_wish . "\n";
                                 }
                             }
                         });
@@ -577,18 +577,18 @@ class SortStudentsController extends Controller
                     if ($project->leader_type === 'App\Student') {
                         if ($project->leader_id != 0) {
                             $leader = $this->get_student($project->leader_id);
-                            echo "-> " . $leader->first_name . " " . $leader->last_name . " wäre der Leiter von " . $project->id . " gewesen\n";
+                            #echo "-> " . $leader->first_name . " " . $leader->last_name . " wäre der Leiter von " . $project->id . " gewesen\n";
                             $leader->role = 1;
-                            echo "--> " . $leader->first_name . " " . $leader->last_name . " ist jetzt ein normaler Teilnehmer\n";
+                            #echo "--> " . $leader->first_name . " " . $leader->last_name . " ist jetzt ein normaler Teilnehmer\n";
 
                             $this->check_wishes($project->leader_id);
                         }
 
                         foreach ($project->leader_assistants as $leader_assistant_id) {
                             $assistant = get_student($leader_assistant_id);
-                            echo "-> " . $assistant->first_name . " " . $assistant->last_name . " wäre ein Assistent von " . $project->id . " gewesen\n";
+                            #echo "-> " . $assistant->first_name . " " . $assistant->last_name . " wäre ein Assistent von " . $project->id . " gewesen\n";
                             $this->$assistant->role = 1;
-                            echo "--> " . $assistant->first_name . " " . $assistant->last_name . "ist jetzt ei normaler Teilnehmer\n";
+                            #echo "--> " . $assistant->first_name . " " . $assistant->last_name . "ist jetzt ei normaler Teilnehmer\n";
 
                             $this->check_wishes($leader_assistant_id);
                         }
@@ -596,12 +596,12 @@ class SortStudentsController extends Controller
                 }
             });
 
-            echo "\n Die Schüler werden ihren 1.Wünschen zugeordnet\n";
+            #echo "\n Die Schüler werden ihren 1.Wünschen zugeordnet\n";
 
             $this->all_students->each(function ($student, $key) {
                 if ($student->role === 1) {
                     $this->append_student_to_project($student->first_wish, $student->id);
-                    echo "-> " . $student->first_name . " " . $student->last_name . " wird seinem 1.Wunsch (" . $student->first_wish . ") zugeordnet\n";
+                    #echo "-> " . $student->first_name . " " . $student->last_name . " wird seinem 1.Wunsch (" . $student->first_wish . ") zugeordnet\n";
                 }
             });
 
@@ -613,14 +613,14 @@ class SortStudentsController extends Controller
                     break;
                 }
 
-                echo "\n----------" . ($max_tries - $tries) . " Durchlauf----------\n";
+                #echo "\n----------" . ($max_tries - $tries) . " Durchlauf----------\n";
 
                 $this->all_projects->each(function ($project, $key) {
                     if (count($project->participants) < $project->min_participants) {       // Hat das Projekt zu wenig Teilnehmer?
-                        echo "\n" . $project->title . " (" . $project->id . ") nur " . count($project->participants) . " von " . $project->min_participants . " Teilnehmern\n";
+                        #echo "\n" . $project->title . " (" . $project->id . ") nur " . count($project->participants) . " von " . $project->min_participants . " Teilnehmern\n";
                         $donor_participants = [];
                         $donor_projects = [];
-                        echo "-> Check ob Projekt aufgefüllt werden kann\n";
+                        #echo "-> Check ob Projekt aufgefüllt werden kann\n";
                         $this->all_projects->each(function ($donor_project, $key) use(&$donor_participants, &$donor_projects, $project) {
                             if ($donor_project != $project) {
                                 foreach ($donor_project->participants as $donor_participant_id) {
@@ -639,14 +639,14 @@ class SortStudentsController extends Controller
                         });
 
                         if ((count($donor_participants) + count($project->participants)) >= $project->min_participants) {                           // Projekt wird aufgefüllt
-                            echo "--> Das Projekt kann aufgefüllt werden\n";
+                            #echo "--> Das Projekt kann aufgefüllt werden\n";
                             foreach ($donor_participants as $donor_participant_id) {
                                 if (count($project->participants) < $project->min_participants) {
-                                    echo "---> " . $this->get_student($donor_participant_id)->first_name . " " . $this->get_student($donor_participant_id)->last_name . " wird nach " . $project->id . " verschoben\n";
+                                    #echo "---> " . $this->get_student($donor_participant_id)->first_name . " " . $this->get_student($donor_participant_id)->last_name . " wird nach " . $project->id . " verschoben\n";
                                     $this->remove_student_from_project($donor_projects[array_search($donor_participant_id, $donor_participants)]->id, $donor_participant_id);
                                     $this->append_student_to_project($project->id, $donor_participant_id);
                                     foreach ($this->get_student($donor_participant_id)->friends as $friend_id) {
-                                        echo "----> " . $this->get_student($donor_participant_id)->first_name . " " . $this->get_student($donor_participant_id)->last_name . " wird als Freund nach " . $project->id . " verschoben\n";
+                                        #echo "----> " . $this->get_student($donor_participant_id)->first_name . " " . $this->get_student($donor_participant_id)->last_name . " wird als Freund nach " . $project->id . " verschoben\n";
                                         $this->remove_student_from_project($donor_projects[array_search($donor_participant_id, $donor_participants)]->id, $friend_id);
                                         $this->append_student_to_project($project->id, $friend_id);
                                         array_splice($donor_project, array_search($friend_id, $donor_participants), 1);
@@ -655,42 +655,42 @@ class SortStudentsController extends Controller
                                 }
                             }
                         } else {
-                            echo "--> Das Projekt kann nicht aufgefüllt werden\n";
-                            echo "---> ";
+                            #echo "--> Das Projekt kann nicht aufgefüllt werden\n";
+                            #echo "---> ";
                             $this->move_participants_and_leaders($project, $key);                                                                                       // Projekt wird aufgelöst
-                            echo "---> ";
+                            #echo "---> ";
                             $this->delete_project($project, $key);
                         }
                     } else if (count($project->participants) > $project->max_participants) {           // Hat das Projekt zu viele Teilnehmer?
-                        echo "\n" . $project->title . " (" . $project->id . ") hat " . count($project->participants) . " von " . $project->max_participants . " Teilnehmern\n";
+                        #echo "\n" . $project->title . " (" . $project->id . ") hat " . count($project->participants) . " von " . $project->max_participants . " Teilnehmern\n";
                         foreach ($project->participants as $participant_id) {
-                            # echo $this->get_student($participant_id) . "\n";
+                            # #echo $this->get_student($participant_id) . "\n";
                             if (count($project->participants) > $project->max_participants) {
                                 $participant = $this->get_student($participant_id);
                                 if (count($this->get_project($participant->first_wish)->participants) - count($participant->friends) < $this->get_project($participant->first_wish)->max_participants) {
-                                    echo "--> " . $participant->first_name . " " . $participant->last_name . " wird nach " . $participant->first_wish . " (1.Wunsch) verschoben\n";
+                                    #echo "--> " . $participant->first_name . " " . $participant->last_name . " wird nach " . $participant->first_wish . " (1.Wunsch) verschoben\n";
                                     $this->remove_student_from_project($project->id, $participant_id);
                                     $this->append_student_to_project($$participant->first_wish, $participant_id);
                                     foreach ($participant->friends as $friend) {
-                                        echo "---> " . $this->get_student($friend)->first_name . " " . $this->get_student($friend)->last_name . " wird als Freund nach " . $this->get_student($friend)->first_wish . " (1.Wunsch) verschoben\n";
+                                        #echo "---> " . $this->get_student($friend)->first_name . " " . $this->get_student($friend)->last_name . " wird als Freund nach " . $this->get_student($friend)->first_wish . " (1.Wunsch) verschoben\n";
                                         $this->remove_student_from_project($project->id, $friend);
                                         $this->append_student_to_project($participant->first_wish, $friend);
                                     }
                                 } elseif (count($this->get_project($participant->second_wish)->participants) - count($participant->friends) < $this->get_project($participant->second_wish)->max_participants) {
-                                    echo "--> " . $participant->first_name . " " . $participant->last_name . " wird nach " . $participant->second_wish . " (2.Wunsch) verschoben\n";
+                                    #echo "--> " . $participant->first_name . " " . $participant->last_name . " wird nach " . $participant->second_wish . " (2.Wunsch) verschoben\n";
                                     $this->remove_student_from_project($project->id, $participant_id);
                                     $this->append_student_to_project($participant->second_wish, $participant_id);
                                     foreach ($participant->friends as $friend) {
-                                        echo "---> " . $this->get_student($friend)->first_name . " " . $this->get_student($friend)->last_name . " wird als Freund nach " . $this->get_student($friend)->second_wish . " (1.Wunsch) verschoben\n";
+                                        #echo "---> " . $this->get_student($friend)->first_name . " " . $this->get_student($friend)->last_name . " wird als Freund nach " . $this->get_student($friend)->second_wish . " (1.Wunsch) verschoben\n";
                                         $this->remove_student_from_project($project->id, $friend);
                                         $this->append_student_to_project($participant->second_wish, $friend);
                                     }
                                 } elseif (count($this->get_project($participant->third_wish)->participants) - count($participant->friends) < $this->get_project($participant->third_wish)->max_participants) {
-                                    echo "--> " . $participant->first_name . " " . $participant->last_name . " wird nach " . $participant->second_wish . " (3.Wunsch) verschoben\n";
+                                    #echo "--> " . $participant->first_name . " " . $participant->last_name . " wird nach " . $participant->second_wish . " (3.Wunsch) verschoben\n";
                                     $this->remove_student_from_project($project->id, $participant_id);
                                     $this->append_student_to_project($participant->third_wish, $participant_id);
                                     foreach ($participant->friends as $friend) {
-                                        echo "---> " . $this->get_student($friend)->first_name . " " . $this->get_student($friend)->last_name . " wird als Freund nach " . $this->get_student($friend)->third_wish . " (1.Wunsch) verschoben\n";
+                                        #echo "---> " . $this->get_student($friend)->first_name . " " . $this->get_student($friend)->last_name . " wird als Freund nach " . $this->get_student($friend)->third_wish . " (1.Wunsch) verschoben\n";
                                         $this->remove_student_from_project($project->id, $friend);
                                         $this->append_student_to_project($participant->third_wish, $friend);
                                     }
@@ -698,10 +698,10 @@ class SortStudentsController extends Controller
                             }
                         }
                     } /* else if (count($project->participants) <= 0) {            // Hat das Projekt überhaupt Teilnehmer? (hindert optimale Lösung)
-                        echo "\n" . $project->title . " hat keine Teilnehmer\n";
-                        echo "-> ";
+                        #echo "\n" . $project->title . " hat keine Teilnehmer\n";
+                        #echo "-> ";
                         $this->move_participants_and_leaders($project, $key);
-                        echo "-> ";
+                        #echo "-> ";
                         $this->delete_project($project, $key);
                     } */
                 });
@@ -710,14 +710,14 @@ class SortStudentsController extends Controller
             }
         }
 
-        echo "\n----------Ende der Sortierung----------\n\n";
+        #echo "\n----------Ende der Sortierung----------\n\n";
 
         $this->all_projects->each(function ($project, $key) {         // Nicht benutze Projekte löschen
             if (count($project->participants) == 0) {
-                echo "\n" . $project->title . " hat keine Teilnehmer\n";
-                echo "-> ";
+                #echo "\n" . $project->title . " hat keine Teilnehmer\n";
+                #echo "-> ";
                 $this->move_participants_and_leaders($project, $key);
-                echo "-> ";
+                #echo "-> ";
                 $this->delete_project($project, $key);
             }
         });
