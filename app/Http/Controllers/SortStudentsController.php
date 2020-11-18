@@ -798,11 +798,14 @@ class SortStudentsController extends Controller
                                 if ($project->image != null && $project->image != '') {
                                     Storage::delete('public/images/'. $project->image);
                                 }
+                            }
+                        }
                     } else {
                         if ($project->delete()) {
                             if ($project->image != null && $project->image != '') {
                                 Storage::delete('public/images/'. $project->image);
                             }
+                        }
                     }
                 }
             }
