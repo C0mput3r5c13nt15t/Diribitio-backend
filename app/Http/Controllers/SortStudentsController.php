@@ -658,8 +658,9 @@ class SortStudentsController extends Controller
                             $this->delete_project($project, $key);
                         }
                     } else if (count($project->participants) > $project->max_participants) {           // Hat das Projekt zu viele Teilnehmer?
-                        echo "\n" . $project->title . " (" . $project->id . ") hat " . count($project->participants) . " von " . $project->min_participants . " Teilnehmern\n";
+                        echo "\n" . $project->title . " (" . $project->id . ") hat " . count($project->participants) . " von " . $project->max_participants . " Teilnehmern\n";
                         foreach ($project->participants as $participant_id) {
+                            echo $this->get_student($participant_id) . "\n";
                             if (count($project->participants) > $project->max_participants) {
                                 $participant = $this->get_student($participant_id);
                                 if (count($this->get_project($participant->first_wish)->participants) - count($participant->friends) < $this->get_project($participant->first_wish)->max_participants) {
