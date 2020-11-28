@@ -13,7 +13,9 @@ use App\Http\Resources\LimitedStudent as LimitedStudentResource;
 use App\Http\Resources\Leader as LeaderResource;
 use App\Http\Resources\LimitedLeader as LimitedLeaderResource;
 use App\Http\Resources\Project as ProjectResource;
-use App\Notifications\ProjectHasNotEnoughParticipants;
+use App\Notifications\LeaderProjectHasNotEnoughParticipants;
+use App\Notifications\StudentProjectHasNotEnoughParticipants;
+use App\Notifications\AssistantProjectHasNotEnoughParticipants;
 
 class SortStudentsController extends Controller
 {
@@ -787,15 +789,23 @@ class SortStudentsController extends Controller
 
                     $student->save();
                 });
-            } else if (Project::find($project->id)) {
-                $project_object = Project::findOrFail($project->id);
+            } else {
+                $project_object = Project::find($project->id);
                 $leader = $project_object->leader;
 
                 if ($leader) {
-                    $leader->notify(new ProjectHasNotEnoughParticipants());
                     if ($project_object->leader_type === 'App\Leader') {
+                        $leader->notify(new LeaderProjectHasNotEnoughParticipants());
                         $leader->project_id = 0;
                         $leader->save();
+                    } else {
+                        $project->assistant_student_leaders->each(function ($leader, $key)  use ($project_object) {
+                            if ($leader->id == $project_object->leader_id) {
+                                $leader->notify(new StudentProjectHasNotEnoughParticipants());
+                            } else {
+                                $leader->notify(new AssistantProjectHasNotEnoughParticipants());
+                            }
+                        });
                     }
                 }
 

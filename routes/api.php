@@ -57,6 +57,7 @@ Route::middleware(['api', 'jwt:leaders'])->group(function () {
         Route::put('/leaders/touch_up_project', 'LeadersController@touch_up_project', function ($request) {} )->middleware('schedule:control,registration')->name('leaders.touch_up_project');
 
         Route::delete('/leaders/destroy_leaded_project_message/{id}', 'LeadersController@destroy_leaded_project_message', function ($request, $id) {} )->middleware('schedule:begin,end')->name('leaders.destroy_leaded_project_message');
+        Route::delete('/leaders/self_destroy', 'LeadersController@self_destroy')->middleware('schedule:control,end')->name('leader.self_destroy');
     });
 });
 
@@ -84,8 +85,9 @@ Route::middleware(['api', 'jwt:admins'])->group(function () {
         Route::delete('/admins/destroy_exchange/{id}', 'AdminsController@destroy_exchange', function ($id) {} )->middleware('schedule:exchange,projects')->name('admins.destroy_exchange');
 
         Route::resource('sign_up_emails', 'SignUpEmailsController')->only([
-            'index', 'store', 'destroy'
+            'store', 'destroy'
         ])->middleware('schedule:begin,sort_students');
+        Route::get('/sign_up_emails', 'SignUpEmailsController@index')->name('sign_up_emails.index');
 
         Route::post('/admins/create_sorting_proposal', 'SortStudentsController@create_sorting_proposal')->middleware('schedule:sort_students,exchange')->name('admins.create_sorting_proposal');
         Route::post('/admins/apply_sorting_proposal', 'SortStudentsController@apply_sorting_proposal')->middleware('schedule:sort_students,exchange')->name('admins.apply_sorting_proposal');
@@ -102,7 +104,6 @@ Route::middleware(['schedule:begin,end'])->group(function () {
     Route::post('students/login', 'StudentAuth\LoginController@login')->name('students.login');
     Route::post('leaders/login', 'LeaderAuth\LoginController@login')->name('leaders.login');
 });
-
 Route::post('admins/login', 'AdminAuth\LoginController@login')->name('admins.login');
 
 Route::post('auth/refresh', 'Auth\RefreshController@refresh')->name('auth.refresh');
@@ -119,11 +120,8 @@ Route::get('/leaders/email/verify/{id}/{hash}', 'LeaderAuth\EMailVerificationCon
 Route::post('/admins/email/resend', 'AdminAuth\EMailVerificationController@resend')->name('admins.verification.resend');
 Route::get('/admins/email/verify/{id}/{hash}', 'AdminAuth\EMailVerificationController@verify')->name('admins.verification.verify');
 
-Route::middleware(['schedule:begin,end'])->group(function () {
-    Route::post('students/logout', 'StudentAuth\LogoutController@logout')->name('students.logout');
-    Route::post('leaders/logout', 'LeaderAuth\LogoutController@logout')->name('leaders.logout');
-});
-
+Route::post('students/logout', 'StudentAuth\LogoutController@logout')->name('students.logout');
+Route::post('leaders/logout', 'LeaderAuth\LogoutController@logout')->name('leaders.logout');
 Route::post('admins/logout', 'AdminAuth\LogoutController@logout')->name('admins.logout');
 
 Route::get('projects/show_little/{id}', 'ProjectsController@show_little', function ($id) {} )->name('projects.show_little');

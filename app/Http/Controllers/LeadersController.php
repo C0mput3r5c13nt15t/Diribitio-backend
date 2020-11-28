@@ -331,4 +331,25 @@ class LeadersController extends Controller
             return response()->json('Sie leiten noch ' . config('diribitio.no_project_noun') . '.', 403);
         }
     }
+
+    /**
+     * Remove the leader associated with the provided token from storage.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function self_destroy()
+    {
+        $leader = $this->authUser();
+
+        if ($leader->project_id == 0 && !$leader->leaded_project()->exists()) {
+            if ($leader->delete()) {
+                return response()->json(['message' => 'Ihr Account wurde erfolgreich gelöscht.'], 200);
+            } else {
+                return response()->json('Es gab einen unbekannten Fehler.', 500);
+            }
+        } else {
+            return response()->json('Ihr konnte nicht gelöscht werden, da sie ' . config('diribitio.indefinite_article_project_noun') . ' leiten.', 403);
+        }
+    }
 }

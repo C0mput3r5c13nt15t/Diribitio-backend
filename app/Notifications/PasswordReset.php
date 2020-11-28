@@ -69,6 +69,7 @@ class PasswordReset extends Notification
 
         return (new MailMessage)
             ->subject(Lang::get('Passwort zurücksetzen'))
+            ->greeting('Hallo!')
             ->line(Lang::get('Sie bekommen diese E-Mail, da von ihrem Account aus eine Passwort-Zurücksetzen-Anfrage gesendet wurde.'))
             ->action(Lang::get('Passwort zurücksetzen'), $resetUrl)
             ->line(Lang::get('Dieser Link verliert seine Gültigkeit in :count Minuten.', ['count' => config('auth.passwords.'.config('auth.defaults.passwords').'.expire')]))

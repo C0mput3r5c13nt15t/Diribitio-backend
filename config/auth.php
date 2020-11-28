@@ -135,7 +135,7 @@ return [
         'leaders' => [
             'provider' => 'leaders',
             'table' => 'password_resets',
-            'expire' => 60,
+            'expire' => 90,
             'throttle' => 60,
         ],
     ],

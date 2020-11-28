@@ -22,6 +22,9 @@ use App\Http\Resources\Project as ProjectResource;
 use App\Http\Resources\Exchange as ExchangeResource;
 use App\Http\Resources\Message as MessageResource;
 use App\Http\Resources\Schedule as ScheduleResource;
+use App\Notifications\LeaderProjectDeleted;
+use App\Notifications\StudentProjectDeleted;
+use App\Notifications\AssistantProjectDeleted;
 
 class AdminsController extends Controller
 {
@@ -160,7 +163,11 @@ class AdminsController extends Controller
      */
     public function project($id)
     {
-        $project = Project::findOrFail($id);
+        $project = Project::find($id);
+
+        if (!$project) {
+            return response()->json(config('diribitio.definite_article_project_noun') . ' konnte nicht gefunden werden.', 200);
+        }
 
         $project->messages = $project->messages()->get();
 
@@ -367,7 +374,7 @@ class AdminsController extends Controller
      */
     public function destroy_project($id)
     {
-        $project = Project::findOrFail($id);
+        $project = Project::findOrfail($id);
 
         $messages = $project->messages();
 
@@ -379,9 +386,9 @@ class AdminsController extends Controller
             $leader = $project->leader;
 
             if ($project->leader()->exists()) {
-                $leader->delete();
+                $leader->notify(new LeaderProjectDeleted());
             } else {
-                return response()->json(config('diribitio.definite_article_project_noun') . ' wird von niemandem geleitet.', 500);
+                #return response()->json(config('diribitio.definite_article_project_noun') . ' wird von niemandem geleitet.', 500);
             }
 
             if ($messages->exists()) {
@@ -410,26 +417,31 @@ class AdminsController extends Controller
         } else if ($project->leader_type === 'App\Student') {
             if ($project->assistant_student_leaders()->exists()) {
                 $student_leader_assistants = $project->assistant_student_leaders;
-            } else {
-                return response()->json(config('diribitio.definite_article_project_noun') . ' wird von niemandem geleitet und kann deswegen nicht gelöscht werden.', 500);
-            }
 
-            $errors = 0;
+                $errors = 0;
 
-            $student_leader_assistants->each(function ($leader, $key) {
-                $leader->role = 1;
-                $leader->project_id = 0;
-                if ($leader->save()) {
-                } else {
-                    $errors += 1;
+                $student_leader_assistants->each(function ($leader, $key) use ($project) {
+                    if ($leader->id == $project->leader_id) {
+                        $leader->notify(new StudentProjectDeleted());
+                    } else {
+                        $leader->notify(new AssistantProjectDeleted());
+                    }
+                    $leader->role = 1;
+                    $leader->project_id = 0;
+                    if ($leader->save()) {
+                    } else {
+                        $errors += 1;
+                    }
+                });
+
+                if ($errors != 0) {
+                    return response()->json('Es gab ' . strval($errors) . ' Fehler beim Aktualisieren der Accounts der Schüler.', 500);
                 }
-            });
 
-            if ($errors != 0) {
-                return response()->json('Es gab ' . strval($errors) . ' Fehler beim Aktualisieren der Accounts der Schüler.', 500);
+                unset($project->assistant_student_leaders);
+            } else {
+                #return response()->json(config('diribitio.definite_article_project_noun') . ' wird von niemandem geleitet und kann deswegen nicht gelöscht werden.', 500);
             }
-
-            unset($project->assistant_student_leaders);
 
             if ($messages->exists()) {
                 if ($messages->delete()) {
