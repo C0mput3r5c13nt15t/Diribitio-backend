@@ -386,7 +386,12 @@ class AdminsController extends Controller
             $leader = $project->leader;
 
             if ($project->leader()->exists()) {
-                $leader->notify(new LeaderProjectDeleted());
+                $leader->project_id = 0;
+                if ($leader->save()) {
+                    $leader->notify(new LeaderProjectDeleted());
+                } else {
+                    return response()->json('Es gab einen unbekannten Fehler.', 500);
+                }
             } else {
                 #return response()->json(config('diribitio.definite_article_project_noun') . ' wird von niemandem geleitet.', 500);
             }

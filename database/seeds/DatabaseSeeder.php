@@ -24,7 +24,7 @@ class DatabaseSeeder extends Seeder
         // Creates a basic schedule with one day interwalls starting the day after creation
 
         DB::table('schedule')->insert([
-            'begin' => Carbon::now(),
+            'begin' => Carbon::now()->add(-1, 'day'),
             'control' => Carbon::now()->add(1, 'day'),
             'registration' => Carbon::now()->add(2, 'day'),
             'sort_students' => Carbon::now()->add(3, 'day'),

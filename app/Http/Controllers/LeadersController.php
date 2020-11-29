@@ -79,6 +79,7 @@ class LeadersController extends Controller
             $message = new Message;
 
             $message->message = $request->input('message');
+            $message->sender_name = $leader->user_name;
 
             if ($leaded_project->messages()->save($message)) {
                 return new MessageResource($message);

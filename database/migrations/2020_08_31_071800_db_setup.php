@@ -107,6 +107,7 @@ class DbSetup extends Migration
             $table->id();
             $table->foreignId('project_id');
             $table->mediumText('message');
+            $table->string('sender_name');
             $table->timestamp('created_at')->nullable()->default(DB::raw('CURRENT_TIMESTAMP'));
         });
         Schema::create('password_resets', function (Blueprint $table) {
