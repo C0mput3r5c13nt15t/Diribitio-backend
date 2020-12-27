@@ -42,7 +42,7 @@ class AssistantProjectHasNotEnoughParticipants extends Notification
     {
         return (new MailMessage)
                     ->greeting('Hallo!')
-                    ->subject('Projettage Gymnasium Dorfen - Dein Projekt findet nicht statt')
+                    ->subject('Projekttage Gymnasium Dorfen - Dein Projekt findet nicht statt')
                     ->line('Es tut uns leid dir mitteilen zu müssen, dass dein Projekt auf Grund eines Mangels an interessierten Teilnehmern nicht stattfinden kann. Aus diesem Grund wurde dein Projekt gelöscht.')
                     ->line('Du bist nun Teilnehmer in einem deiner drei Projektwünsche und kannst natürlich auch Tauschen.')
                     ->line('Wir wünschen dir deshalb trotzdem viel Spaß in den kommenden Projekttagen!');
