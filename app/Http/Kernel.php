@@ -41,7 +41,7 @@ class Kernel extends HttpKernel
         ],
 
         'api' => [
-            'throttle:20,1',                                                    # Change back to 60,1
+            'throttle:80,1',
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
             \App\Http\Middleware\RequestHeaders::class
         ],
@@ -65,9 +65,9 @@ class Kernel extends HttpKernel
         'signed' => \Illuminate\Routing\Middleware\ValidateSignature::class,
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
         // 'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
-        'verified' => \App\Http\Middleware\EMailVeried::class,
+        'verified' => \App\Http\Middleware\EMailVerified::class,
         'jwt' => \App\Http\Middleware\AuthenticateJWT::class,
         'schedule' => \App\Http\Middleware\RequestSchedule::class,
-        // 'cors' => \App\Http\Middleware\RequestHeaders::class,
+        'cors' => \App\Http\Middleware\RequestHeaders::class,
     ];
 }
