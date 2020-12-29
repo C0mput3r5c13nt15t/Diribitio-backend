@@ -49,10 +49,10 @@ class AdminsController extends Controller
     {
         $students = Student::all();
 
-        $searchEmail = $request->input('search_email');
-        $searchFirstName = $request->input('search_first_name');
-        $searchLastName = $request->input('search_last_name');
-        $searchClass = $request->input('search_class');
+        $searchEmail = strval($request->input('search_email'));
+        $searchFirstName = strval($request->input('search_first_name'));
+        $searchLastName = strval($request->input('search_last_name'));
+        $searchClass = strval($request->input('search_class'));
 
         if (!$searchEmail && !$searchFirstName && !$searchLastName && !$searchClass) {
             return;
