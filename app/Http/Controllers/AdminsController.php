@@ -54,8 +54,6 @@ class AdminsController extends Controller
         $searchLastName = $request->input('search_last_name');
         $searchClass = $request->input('search_class');
 
-        echo json_encode("message" => !empty($searchFirstName));
-
         if (!$searchEmail && !$searchFirstName && !$searchLastName && !$searchClass) {
             return;
         }
