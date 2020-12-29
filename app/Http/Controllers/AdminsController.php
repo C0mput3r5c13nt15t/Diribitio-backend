@@ -63,21 +63,29 @@ class AdminsController extends Controller
 
             echo $searchEmail;
 
-            if ($searchEmail) {
+            if (!empty($searchEmail)) {
                 if (strpos($student->email, $searchEmail)) {
                     return true;
+                } else {
+                    return false;
                 }
-            } else if ($searchFirstName) {
+            } else if (!empty($searchFirstName)) {
                 if (strpos($student->first_name, $searchFirstName)) {
                     return true;
+                } else {
+                    return false;
                 }
-            } else if ($searchLastName) {
+            } else if (!empty($searchLastName)) {
                 if (strpos($student->last_name, $searchLastName)) {
                     return true;
+                } else {
+                    return false;
                 }
-            } else if ($searchClass) {
+            } else if (!empty($searchClass)) {
                 if (strpos($class, $searchClass)) {
                     return true;
+                } else {
+                    return false;
                 }
             } else {
                 return false;
