@@ -67,26 +67,27 @@ class AdminsController extends Controller
                 } else {
                     return false;
                 }
-            } else if ($searchFirstName  != "") {
+            }
+            if ($searchFirstName  != "") {
                 if (strpos($student->first_name, $searchFirstName) !== false) {
                     return true;
                 } else {
                     return false;
                 }
-            } else if ($searchLastName != "") {
+            }
+            if ($searchLastName != "") {
                 if (strpos($student->last_name, $searchLastName) !== false) {
                     return true;
                 } else {
                     return false;
                 }
-            } else if ($searchClass  != "") {
+            }
+            if ($searchClass  != "") {
                 if (strpos($class, $searchClass) !== false) {
                     return true;
                 } else {
                     return false;
                 }
-            } else {
-                return false;
             }
         });
 
