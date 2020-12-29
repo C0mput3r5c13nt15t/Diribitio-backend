@@ -56,8 +56,8 @@ class AdminsController extends Controller
         }
 
         $students = $students->filter(function ($student) use ($searchValue) {
-            $value = strval($student->first_name) . ' ' . strval($student->last_name) . ' ' . strval($student->grade) . strval($student->letter);
-            if (strpos($value, $searchValue) !== false) {
+            $class = strval($student->grade) . strval($student->letter);
+            if (strpos($student->email, $searchValue) !== false || $student->first_name, $searchValue) !== false || $student->last_name, $searchValue) !== false || $class, $searchValue) !== false) {
                 return true;
             } else {
                 return false;
