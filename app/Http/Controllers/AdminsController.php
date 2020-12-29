@@ -63,21 +63,89 @@ class AdminsController extends Controller
 
             if ($searchEmail != "") {
                 if (strpos($student->email, $searchEmail) !== false) {
-                    return true;
+                    if ($searchFirstName  != "") {
+                        if (strpos($student->first_name, $searchFirstName) !== false) {
+                            if ($searchLastName != "") {
+                                if (strpos($student->last_name, $searchLastName) !== false) {
+                                    if ($searchClass  != "") {
+                                        if (strpos($class, $searchClass) !== false) {
+                                            return true;
+                                        } else {
+                                            return false;
+                                        }
+                                    }
+                                } else {
+                                    return false;
+                                }
+                            }
+                            if ($searchClass  != "") {
+                                if (strpos($class, $searchClass) !== false) {
+                                    return true;
+                                } else {
+                                    return false;
+                                }
+                            }
+                        } else {
+                            return false;
+                        }
+                    }
+                    if ($searchLastName != "") {
+                        if (strpos($student->last_name, $searchLastName) !== false) {
+                            if (strpos($class, $searchClass) !== false) {
+                                return true;
+                            } else {
+                                return false;
+                            }
+                        } else {
+                            return false;
+                        }
+                    }
+                    if ($searchClass  != "") {
+                        if (strpos($class, $searchClass) !== false) {
+                            return true;
+                        } else {
+                            return false;
+                        }
+                    }
                 } else {
                     return false;
                 }
             }
             if ($searchFirstName  != "") {
                 if (strpos($student->first_name, $searchFirstName) !== false) {
-                    return true;
+                    if ($searchLastName != "") {
+                        if (strpos($student->last_name, $searchLastName) !== false) {
+                            if ($searchClass  != "") {
+                                if (strpos($class, $searchClass) !== false) {
+                                    return true;
+                                } else {
+                                    return false;
+                                }
+                            }
+                        } else {
+                            return false;
+                        }
+                    }
+                    if ($searchClass  != "") {
+                        if (strpos($class, $searchClass) !== false) {
+                            return true;
+                        } else {
+                            return false;
+                        }
+                    }
                 } else {
                     return false;
                 }
             }
             if ($searchLastName != "") {
                 if (strpos($student->last_name, $searchLastName) !== false) {
-                    return true;
+                    if ($searchClass  != "") {
+                        if (strpos($class, $searchClass) !== false) {
+                            return true;
+                        } else {
+                            return false;
+                        }
+                    }
                 } else {
                     return false;
                 }
