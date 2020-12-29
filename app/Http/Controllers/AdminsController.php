@@ -63,7 +63,7 @@ class AdminsController extends Controller
 
             if ($searchEmail != "") {
                 if (strpos($student->email, $searchEmail) !== false) {
-                    if ($searchFirstName  != "") {
+                    if ($searchFirstName != "") {
                         if (strpos($student->first_name, $searchFirstName) !== false) {
                             if ($searchLastName != "") {
                                 if (strpos($student->last_name, $searchLastName) !== false) {
@@ -77,8 +77,7 @@ class AdminsController extends Controller
                                 } else {
                                     return false;
                                 }
-                            }
-                            if ($searchClass  != "") {
+                            } else if ($searchClass  != "") {
                                 if (strpos($class, $searchClass) !== false) {
                                     return true;
                                 } else {
@@ -88,8 +87,7 @@ class AdminsController extends Controller
                         } else {
                             return false;
                         }
-                    }
-                    if ($searchLastName != "") {
+                    } else if ($searchLastName != "") {
                         if (strpos($student->last_name, $searchLastName) !== false) {
                             if (strpos($class, $searchClass) !== false) {
                                 return true;
@@ -99,8 +97,7 @@ class AdminsController extends Controller
                         } else {
                             return false;
                         }
-                    }
-                    if ($searchClass  != "") {
+                    } else if ($searchClass  != "") {
                         if (strpos($class, $searchClass) !== false) {
                             return true;
                         } else {
@@ -110,8 +107,7 @@ class AdminsController extends Controller
                 } else {
                     return false;
                 }
-            }
-            if ($searchFirstName  != "") {
+            } else if ($searchFirstName  != "") {
                 if (strpos($student->first_name, $searchFirstName) !== false) {
                     if ($searchLastName != "") {
                         if (strpos($student->last_name, $searchLastName) !== false) {
@@ -125,8 +121,7 @@ class AdminsController extends Controller
                         } else {
                             return false;
                         }
-                    }
-                    if ($searchClass  != "") {
+                    } else if ($searchClass  != "") {
                         if (strpos($class, $searchClass) !== false) {
                             return true;
                         } else {
@@ -136,8 +131,7 @@ class AdminsController extends Controller
                 } else {
                     return false;
                 }
-            }
-            if ($searchLastName != "") {
+            } else if ($searchLastName != "") {
                 if (strpos($student->last_name, $searchLastName) !== false) {
                     if ($searchClass  != "") {
                         if (strpos($class, $searchClass) !== false) {
@@ -149,8 +143,7 @@ class AdminsController extends Controller
                 } else {
                     return false;
                 }
-            }
-            if ($searchClass  != "") {
+            } else if ($searchClass  != "") {
                 if (strpos($class, $searchClass) !== false) {
                     return true;
                 } else {
