@@ -79,7 +79,7 @@ class AdminsController extends Controller
                 } else {
                     return false;
                 }
-            } else if (empty($searchClass  != "") {
+            } else if ($searchClass  != "") {
                 if (strpos($class, $searchClass)) {
                     return true;
                 } else {
