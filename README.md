@@ -13,3 +13,6 @@ At the current point in time, because the app is still in deveploment and hasn't
 ## Who did this?
 Basically just me :) and if you want to conatct me here's my email:  
 -> [pauljustus279@gmail.com](mailto:pauljustus279@gmail.com)
+
+
+## Help
