@@ -49,7 +49,10 @@ class AdminsController extends Controller
     {
         $students = Student::all();
 
-        $searchValue = $request->input('search_value');
+        $searchEmail = $request->input('search_value');
+        $searchFirstName = $request->input('search_value');
+        $searchLastName = $request->input('search_value');
+        $searchClass = $request->input('search_value');
 
         if (!$searchValue) {
             return;
@@ -57,7 +60,7 @@ class AdminsController extends Controller
 
         $students = $students->filter(function ($student) use ($searchValue) {
             $class = strval($student->grade) . strval($student->letter);
-            if (strpos($searchValue, $student->email) !== false || strpos($searchValue, $student->first_name) !== false || strpos($searchValue, $student->last_name) !== false || strpos($searchValue, $class) !== false) {
+            if (strpos($searchEmail, $student->email) !== false && strpos($searchFirstName, $student->first_name) !== false && strpos($searchLastName, $student->last_name) !== false && strpos($searchClass, $class) !== false) {
                 return true;
             } else {
                 return false;
