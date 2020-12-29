@@ -73,7 +73,7 @@ class AdminsController extends Controller
                 } else {
                     return false;
                 }
-            } else if (empty($searchLastName != "") {
+            } else if ($searchLastName != "") {
                 if (strpos($student->last_name, $searchLastName)) {
                     return true;
                 } else {
