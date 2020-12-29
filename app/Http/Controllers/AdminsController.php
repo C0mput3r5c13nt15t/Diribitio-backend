@@ -41,7 +41,7 @@ class AdminsController extends Controller
     }
 
     /**
-     * Display a listing of the searched students.
+     * Display a listing of the searched students. updated
      *
      * @return \Illuminate\Http\Response
      */
