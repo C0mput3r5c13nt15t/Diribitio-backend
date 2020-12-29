@@ -62,25 +62,25 @@ class AdminsController extends Controller
             $class = strval($student->grade) . strval($student->letter);
 
             if ($searchEmail != "") {
-                if (strpos($student->email, $searchEmail)) {
+                if (strpos($student->email, $searchEmail) !== false) {
                     return true;
                 } else {
                     return false;
                 }
             } else if ($searchFirstName  != "") {
-                if (strpos($student->first_name, $searchFirstName)) {
+                if (strpos($student->first_name, $searchFirstName) !== false) {
                     return true;
                 } else {
                     return false;
                 }
             } else if ($searchLastName != "") {
-                if (strpos($student->last_name, $searchLastName)) {
+                if (strpos($student->last_name, $searchLastName) !== false) {
                     return true;
                 } else {
                     return false;
                 }
             } else if ($searchClass  != "") {
-                if (strpos($class, $searchClass)) {
+                if (strpos($class, $searchClass) !== false) {
                     return true;
                 } else {
                     return false;
