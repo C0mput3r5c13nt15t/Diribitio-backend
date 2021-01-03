@@ -501,7 +501,7 @@ class SortStudentsController extends Controller
                             $this->remove_wish($student->id, $friend->id);
                         }
                     } else {
-                        $this->remove_wish($student->id, $friend->id);
+                        $this->remove_wish($student->id, $friend_id);
                     }
 
                 }
