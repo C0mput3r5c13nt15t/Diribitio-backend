@@ -726,6 +726,8 @@ class SortStudentsController extends Controller
             if (count($project->participants) == 0) {
                 #echo "\n" . $project->title . " hat keine Teilnehmer\n";
                 #echo "-> ";
+                $this->move_participants_and_leaders($project, $key);
+                #echo "-> ";
                 $this->delete_project($project, $key);
             }
         });
