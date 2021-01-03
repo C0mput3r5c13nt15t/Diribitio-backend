@@ -801,7 +801,8 @@ class SortStudentsController extends Controller
                         $leader->project_id = 0;
                         $leader->save();
                     } else {
-                        $project->assistant_student_leaders->each(function ($leader, $key)  use ($project_object) {
+                        collect($project->assistant_student_leaders)->each(function ($item)  use ($project_object) {
+                            $leader = (object) $item;
                             if ($leader->id == $project_object->leader_id) {
                                 $leader->notify(new StudentProjectHasNotEnoughParticipants());
                             } else {
