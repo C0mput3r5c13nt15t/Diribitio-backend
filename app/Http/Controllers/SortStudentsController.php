@@ -53,13 +53,13 @@ class SortStudentsController extends Controller
             $student->friends = [];
 
             if ($student->role === 1) {
-                if ($student->first_friend !== 0 && $student->first_friend !== 0) {
+                if ($student->first_friend !== 0) {
                     $student->friends = array_merge($student->friends, [$student->first_friend]);
                 }
-                if ($student->second_friend !== 0 && $student->second_friend !== 0) {
+                if ($student->second_friend !== 0) {
                     $student->friends = array_merge($student->friends, [$student->second_friend]);
                 }
-                if ($student->third_friend !== 0 && $student->third_friend !== 0) {
+                if ($student->third_friend !== 0) {
                     $student->friends = array_merge($student->friends, [$student->third_friend]);
                 }
             }
