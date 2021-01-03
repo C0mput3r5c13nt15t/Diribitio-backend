@@ -666,11 +666,11 @@ class SortStudentsController extends Controller
                         }
                     } else if (count($project->participants) > $project->max_participants) {           // Hat das Projekt zu viele Teilnehmer?
                         #echo "\n" . $project->title . " (" . $project->id . ") hat " . count($project->participants) . " von " . $project->max_participants . " Teilnehmern\n";
-                        foreach ($project->participants as $participant_id) {
+                        foreach ($project->participants as $participant_id => &$participant_id) {
                             # #echo $this->get_student($participant_id) . "\n";
                             if (count($project->participants) > $project->max_participants) {
                                 $participant = $this->get_student($participant_id);
-                                if (count($this->get_project($participant->first_wish)->participants) - count($participant->friends) < $this->get_project($participant->first_wish)->max_participants) {
+                                if (count($this->get_project($participant->first_wish)->participants) + count($participant->friends) < $this->get_project($participant->first_wish)->max_participants) {
                                     #echo "--> " . $participant->first_name . " " . $participant->last_name . " wird nach " . $participant->first_wish . " (1.Wunsch) verschoben\n";
                                     $this->remove_student_from_project($project->id, $participant_id);
                                     $this->append_student_to_project($$participant->first_wish, $participant_id);
@@ -679,7 +679,7 @@ class SortStudentsController extends Controller
                                         $this->remove_student_from_project($project->id, $friend);
                                         $this->append_student_to_project($participant->first_wish, $friend);
                                     }
-                                } elseif (count($this->get_project($participant->second_wish)->participants) - count($participant->friends) < $this->get_project($participant->second_wish)->max_participants) {
+                                } elseif (count($this->get_project($participant->second_wish)->participants) + count($participant->friends) < $this->get_project($participant->second_wish)->max_participants) {
                                     #echo "--> " . $participant->first_name . " " . $participant->last_name . " wird nach " . $participant->second_wish . " (2.Wunsch) verschoben\n";
                                     $this->remove_student_from_project($project->id, $participant_id);
                                     $this->append_student_to_project($participant->second_wish, $participant_id);
@@ -688,7 +688,7 @@ class SortStudentsController extends Controller
                                         $this->remove_student_from_project($project->id, $friend);
                                         $this->append_student_to_project($participant->second_wish, $friend);
                                     }
-                                } elseif (count($this->get_project($participant->third_wish)->participants) - count($participant->friends) < $this->get_project($participant->third_wish)->max_participants) {
+                                } elseif (count($this->get_project($participant->third_wish)->participants) + count($participant->friends) < $this->get_project($participant->third_wish)->max_participants) {
                                     #echo "--> " . $participant->first_name . " " . $participant->last_name . " wird nach " . $participant->second_wish . " (3.Wunsch) verschoben\n";
                                     $this->remove_student_from_project($project->id, $participant_id);
                                     $this->append_student_to_project($participant->third_wish, $participant_id);

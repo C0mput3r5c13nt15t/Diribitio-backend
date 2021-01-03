@@ -43,8 +43,8 @@ class LeaderProjectDeleted extends Notification
         return (new MailMessage)
                     ->greeting('Hallo!')
                     ->subject('Projettage Gymnasium Dorfen - Ihr Projekt wurde gelöscht')
-                    ->line('Es tut uns leid ihnen mitteilen zu müssen, dass ihr Projekt gelöscht wurde. Für nähere Informationen, warum das Projekt gelöscht wurde, wenden sie sich bitte an den zuständigen Admin.')
-                    ->line('Ihr Account bleibt allerdings, wenn sie ihn nicht persönlich löschen, bis zum Ende der Projekttage erhalten.');
+                    ->line('Es tut uns leid Ihnen mitteilen zu müssen, dass Ihr Projekt gelöscht wurde. Für nähere Informationen, warum das Projekt gelöscht wurde, wenden Sie sich bitte an den zuständigen Admin.')
+                    ->line('Ihr Account bleibt allerdings, wenn Sie ihn nicht persönlich löschen, bis zum Ende der Projekttage erhalten.');
     }
 
     /**

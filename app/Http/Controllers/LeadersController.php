@@ -173,7 +173,7 @@ class LeadersController extends Controller
                     if ($leader->save()) {
                         return response()->json(['message' => config('diribitio.definite_article_project_noun') . ' wurde erfolgreich erstellt.'], 200);
                     } else {
-                        return response()->json('Es gab beim Aktualisieren ihres Accounts.', 500);
+                        return response()->json('Es gab beim Aktualisieren Ihres Accounts.', 500);
                     }
                 } else {
                     return response()->json('Es gab einen unbekannten Fehler.', 500);
@@ -350,7 +350,7 @@ class LeadersController extends Controller
                 return response()->json('Es gab einen unbekannten Fehler.', 500);
             }
         } else {
-            return response()->json('Ihr konnte nicht gelöscht werden, da sie ' . config('diribitio.indefinite_article_project_noun') . ' leiten.', 403);
+            return response()->json('Ihr konnte nicht gelöscht werden, da Sie ' . config('diribitio.indefinite_article_project_noun') . ' leiten.', 403);
         }
     }
 }

@@ -53,9 +53,9 @@ class EmailVerify extends Notification
         return (new MailMessage)
             ->subject(Lang::get('E-Mail-Adresse verifizieren'))
             ->greeting('Hallo!')
-            ->line(Lang::get('Bitte hier clicken um ihre E-Mail-Adresse'))
+            ->line(Lang::get('Bitte hier clicken um Ihre E-Mail-Adresse'))
             ->action(Lang::get('E-Mail-Adresse verifizieren'), $verificationUrl)
-            ->line(Lang::get('Falls sie keine Account erstellen wollten, geben sie bitte dem Admin bescheid.'));
+            ->line(Lang::get('Falls Sie keine Account erstellen wollten, geben Sie bitte dem Admin bescheid.'));
     }
 
     /**

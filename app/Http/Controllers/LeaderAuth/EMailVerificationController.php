@@ -39,7 +39,7 @@ class EMailVerificationController extends Controller
     public function resend(Request $request)
     {
         if ($request->user('leaders')->hasVerifiedEmail()) {
-            return response()->json('Sie haben ihre E-Mail bereits verifiziert.', 400);
+            return response()->json('Sie haben Ihre E-Mail bereits verifiziert.', 400);
         }
 
         $request->user('leaders')->sendEmailVerificationNotification();
