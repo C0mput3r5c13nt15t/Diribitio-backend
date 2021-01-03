@@ -801,13 +801,12 @@ class SortStudentsController extends Controller
                         $leader->project_id = 0;
                         $leader->save();
                     } else {
-                        collect($project->assistant_student_leaders)->each(function ($item) use ($project_object) {
+                        collect($project->assistant_student_leaders)->each(function ($item, $key)  use ($project_object) {
                             $leader = (object) $item;
-                            $student = Student::findOrFail($leader->id);
-                            if ($student->id == $project_object->leader_id) {
-                                $student->notify(new StudentProjectHasNotEnoughParticipants());
+                            if ($leader->id == $project_object->leader_id) {
+                                $leader->notify(new StudentProjectHasNotEnoughParticipants());
                             } else {
-                                $student->notify(new AssistantProjectHasNotEnoughParticipants());
+                                $leader->notify(new AssistantProjectHasNotEnoughParticipants());
                             }
                         });
                     }
