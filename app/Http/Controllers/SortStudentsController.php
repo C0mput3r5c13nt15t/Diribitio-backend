@@ -492,13 +492,18 @@ class SortStudentsController extends Controller
                 foreach ($student->friends as $friend_id) {
                     $friend = $this->get_student($friend_id);
 
-                    if (in_array($student->id, $friend->friends)) {         // Freundschaften werden auf gegenseitigkeit geprüft => Wünsche werden gleich gesetzt
-                        $friend->first_wish = $student->first_wish;
-                        $friend->second_wish = $student->second_wish;
-                        $friend->third_wish = $student->third_wish;
+                    if ($friend) {
+                        if (in_array($student->id, $friend->friends)) {         // Freundschaften werden auf gegenseitigkeit geprüft => Wünsche werden gleich gesetzt
+                            $friend->first_wish = $student->first_wish;
+                            $friend->second_wish = $student->second_wish;
+                            $friend->third_wish = $student->third_wish;
+                        } else {
+                            $this->remove_wish($student->id, $friend->id);
+                        }
                     } else {
                         $this->remove_wish($student->id, $friend->id);
                     }
+
                 }
             });
 
