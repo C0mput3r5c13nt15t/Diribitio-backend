@@ -644,18 +644,19 @@ class SortStudentsController extends Controller
                         if ((count($donor_participants) + count($project->participants)) >= $project->min_participants) {                           // Projekt wird aufgefüllt
                             echo "--> Das Projekt kann aufgefüllt werden\n";
                             foreach ($donor_participants as $donor_participant_id) {
-                                if (count($project->participants) < $project->min_participants) {
-                                    echo "---> " . $this->get_student($donor_participant_id)->first_name . " " . $this->get_student($donor_participant_id)->last_name . " wird nach " . $project->id . " verschoben\n";
-                                    $this->remove_student_from_project($donor_projects[array_search($donor_participant_id, $donor_participants)]->id, $donor_participant_id);
-                                    $this->append_student_to_project($project->id, $donor_participant_id);
-                                    foreach ($this->get_student($donor_participant_id)->friends as $friend_id) {
-                                        echo "----> " . $this->get_student($friend_id)->first_name . " " . $this->get_student($friend_id)->last_name . " wird als Freund nach " . $project->id . " verschoben\n";
-                                        $this->remove_student_from_project($donor_projects[array_search($donor_participant_id, $donor_participants)]->id, $friend_id);
-                                        $this->append_student_to_project($project->id, $friend_id);
-                                        array_splice($donor_projects, array_search($friend_id, $donor_participants)+1, 1);
-                                        array_splice($donor_participants, array_search($friend_id, $donor_participants)+1, 1);
-                                        echo json_encode($donor_participants);
+                                if (!in_array($donor_participant_id, $project->participants)) {
+                                    if (count($project->participants) < $project->min_participants) {
+                                        echo "---> " . $this->get_student($donor_participant_id)->first_name . " " . $this->get_student($donor_participant_id)->last_name . " wird nach " . $project->id . " verschoben\n";
+                                        $this->remove_student_from_project($donor_projects[array_search($donor_participant_id, $donor_participants)]->id, $donor_participant_id);
+                                        $this->append_student_to_project($project->id, $donor_participant_id);
+                                        foreach ($this->get_student($donor_participant_id)->friends as $friend_id) {
+                                            echo "----> " . $this->get_student($friend_id)->first_name . " " . $this->get_student($friend_id)->last_name . " wird als Freund nach " . $project->id . " verschoben\n";
+                                            $this->remove_student_from_project($donor_projects[array_search($donor_participant_id, $donor_participants)]->id, $friend_id);
+                                            $this->append_student_to_project($project->id, $friend_id);
+                                        }
                                     }
+                                } else {
+                                    echo "---> " . $this->get_student($donor_participant_id)->first_name . " " . $this->get_student($donor_participant_id)->last_name . " wurde bereits nach " . $project->id . " verschoben\n";
                                 }
                             }
                         } else {
