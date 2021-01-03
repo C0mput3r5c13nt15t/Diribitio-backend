@@ -654,6 +654,7 @@ class SortStudentsController extends Controller
                                         $this->append_student_to_project($project->id, $friend_id);
                                         array_splice($donor_projects, array_search($friend_id, $donor_participants), 1);
                                         array_splice($donor_participants, array_search($friend_id, $donor_participants), 1);
+                                        echo json_encode($donor_participants);
                                     }
                                 }
                             }
