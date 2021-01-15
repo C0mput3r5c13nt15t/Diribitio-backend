@@ -7,7 +7,7 @@ use Faker\Generator as Faker;
 
 $factory->define(App\Project::class, function (Faker $faker) {
     return [
-        'authorized' => random_int(0, 1),
+        'authorized' => 1,
         'title' => $faker->unique()->text(10),
         'image' => 'project.jpg',
         'descr' => $faker->text(75),
