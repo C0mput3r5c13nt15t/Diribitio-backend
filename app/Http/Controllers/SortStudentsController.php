@@ -632,15 +632,19 @@ class SortStudentsController extends Controller
                         $this->all_projects->each(function ($donor_project, $key) use(&$donor_participants, &$donor_projects, $project) {
                             if ($donor_project != $project) {
                                 foreach ($donor_project->participants as $donor_participant_id) {
-                                    if ($this->get_student($donor_participant_id)->first_wish == $project->id && $donor_project->min_participants <= count($donor_project->participants) - (1 + count($this->get_student($donor_participant_id)->friends))) {
-                                        array_push($donor_participants, $donor_participant_id);
-                                        array_push($donor_projects, $donor_project);
-                                    } elseif ($this->get_student($donor_participant_id)->second_wish == $project->id && $donor_project->min_participants <= count($donor_project->participants) - (1 + count($this->get_student($donor_participant_id)->friends))) {
-                                        array_push($donor_participants, $donor_participant_id);
-                                        array_push($donor_projects, $donor_project);
-                                    } elseif ($this->get_student($donor_participant_id)->third_wish == $project->id && $donor_project->min_participants <= count($donor_project->participants) - (1 + count($this->get_student($donor_participant_id)->friends))) {
-                                        array_push($donor_participants, $donor_participant_id);
-                                        array_push($donor_projects, $donor_project);
+                                    if ($this->get_student($donor_participant_id)) {
+                                        if ($this->get_student($donor_participant_id)->first_wish == $project->id && $donor_project->min_participants <= count($donor_project->participants) - (1 + count($this->get_student($donor_participant_id)->friends))) {
+                                            array_push($donor_participants, $donor_participant_id);
+                                            array_push($donor_projects, $donor_project);
+                                        } elseif ($this->get_student($donor_participant_id)->second_wish == $project->id && $donor_project->min_participants <= count($donor_project->participants) - (1 + count($this->get_student($donor_participant_id)->friends))) {
+                                            array_push($donor_participants, $donor_participant_id);
+                                            array_push($donor_projects, $donor_project);
+                                        } elseif ($this->get_student($donor_participant_id)->third_wish == $project->id && $donor_project->min_participants <= count($donor_project->participants) - (1 + count($this->get_student($donor_participant_id)->friends))) {
+                                            array_push($donor_participants, $donor_participant_id);
+                                            array_push($donor_projects, $donor_project);
+                                        }
+                                    } else {
+                                        remove_student_from_project($donor_project->id, $donor_participant_id);
                                     }
                                 }
                             }
