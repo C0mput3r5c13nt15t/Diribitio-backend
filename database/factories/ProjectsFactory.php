@@ -21,7 +21,7 @@ $factory->define(App\Project::class, function (Faker $faker) {
         'second_day_end' => $faker->time,
         'min_grade' => random_int(5, 7),
         'max_grade' => random_int(7, 11),
-        'min_participants' => random_int(1, 5),
-        'max_participants' => random_int(5, 15)
+        'min_participants' => 1,
+        'max_participants' => random_int(30, 50)
     ];
 });
