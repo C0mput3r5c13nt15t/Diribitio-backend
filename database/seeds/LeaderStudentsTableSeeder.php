@@ -11,7 +11,7 @@ class LeaderStudentsTableSeeder extends Seeder
      */
     public function run()
     {
-        factory(App\Student::class, 25)->create()->each(function($student) {
+        factory(App\Student::class, 250)->create()->each(function($student) {
 
             $project = factory(App\Project::class)->create([
                 'leader_name' => $student->first_name . ' ' . $student->last_name,
