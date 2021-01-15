@@ -22,6 +22,6 @@ $factory->define(App\Project::class, function (Faker $faker) {
         'min_grade' => random_int(5, 7),
         'max_grade' => random_int(7, 11),
         'min_participants' => 1,
-        'max_participants' => random_int(30, 50)
+        'max_participants' => random_int(40, 60)
     ];
 });

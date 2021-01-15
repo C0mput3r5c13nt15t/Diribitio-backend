@@ -11,7 +11,7 @@ class LeadersTableSeeder extends Seeder
      */
     public function run()
     {
-        factory(App\Leader::class, 10)->create()->each(function($leader) {
+        factory(App\Leader::class, 20)->create()->each(function($leader) {
 
             $project = factory(App\Project::class)->create([
                 'leader_id' => $leader->id,
