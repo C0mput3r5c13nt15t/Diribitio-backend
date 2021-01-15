@@ -76,7 +76,7 @@ class SortStudentsController extends Controller
         echo "Überprüft, ob alle Projekte zugelassen sind\n";
         $this->all_projects->each(function ($project, $key) {
             if ($project->authorized == 0) {
-                echo "-> " . $project->title . " war nicht authorisiert und findet deshalb nicht statt";
+                echo "-> " . $project->title . " war nicht authorisiert und findet deshalb nicht statt\n";
                 $this->all_projects->forget($key);
 
                 if ($project->leader_type === 'App\Student') {
