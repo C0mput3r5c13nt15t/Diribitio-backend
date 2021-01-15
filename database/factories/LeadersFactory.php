@@ -11,6 +11,6 @@ $factory->define(App\Leader::class, function (Faker $faker) {
         'email' => $faker->unique()->safeEmail,
         'email_verified_at' => time(),
         'password' => bcrypt('Passwort'),
-        'project_id' => $faker->unique()->numberBetween(1, 500),
+        'project_id' => $faker->unique()->numberBetween(1, 5000),
     ];
 });
