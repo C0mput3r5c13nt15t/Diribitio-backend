@@ -8,7 +8,7 @@ use Faker\Generator as Faker;
 $factory->define(App\Project::class, function (Faker $faker) {
     return [
         'authorized' => 1,
-        'title' => $faker->unique()->text(10),
+        'title' => $faker->unique()->text(20),
         'image' => 'project.jpg',
         'descr' => $faker->text(75),
         'leader_name' => $faker->title . ' ' . $faker->lastName,
