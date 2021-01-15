@@ -644,7 +644,7 @@ class SortStudentsController extends Controller
                                             array_push($donor_projects, $donor_project);
                                         }
                                     } else {
-                                        remove_student_from_project($donor_project->id, $donor_participant_id);
+                                        $this->remove_student_from_project($donor_project->id, $donor_participant_id);
                                     }
                                 }
                             }
