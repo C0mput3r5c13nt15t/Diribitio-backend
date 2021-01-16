@@ -13,15 +13,15 @@ $factory->define(App\Student::class, function (Faker $faker) {
         'password' => bcrypt('Passwort'),
         'first_name' => $faker->firstName,
         'last_name' => $faker->lastName,
-        'grade' => 9,
-        'letter' => 'A',
+        'grade' => $faker->numberBetween(5, 11),
+        'letter' => strtoupper($faker->lexify('?')),
         'exchange_id' => 0,
         'first_friend' => 0,
         'second_friend' => 0,
         'third_friend' => 0,
-        'first_wish' => $faker->numberBetween(1, 125),       # Danger : Hardcoded !!!!
-        'second_wish' => $faker->numberBetween(1, 125),
-        'third_wish' => $faker->numberBetween(1, 125),
+        'first_wish' => $faker->numberBetween(1, 10),       # Danger : Hardcoded !!!!
+        'second_wish' => $faker->numberBetween(1, 10),
+        'third_wish' => $faker->numberBetween(1, 10),
         'project_id' => 0,
         'role' => 1,
     ];
