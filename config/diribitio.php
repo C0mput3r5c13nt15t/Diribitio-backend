@@ -19,7 +19,7 @@ return [
 
     'required_email_suffix' => '@yourschool.onmicrosoft.com',
 
-    'frontend_url' => 'http://192.248.186.231/#/Projekttage',
+    'frontend_url' => 'https://www.diribitio.de/#/Projekttage',
 
     'definite_article_project_noun' => 'Das Projekt',
 
