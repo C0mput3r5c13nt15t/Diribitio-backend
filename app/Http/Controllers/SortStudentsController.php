@@ -799,40 +799,42 @@ class SortStudentsController extends Controller
                 });
             } else {
                 $project_object = Project::find($project->id);
-                $leader = $project_object->leader;
+                if ($project_object) {
+                    $leader = $project_object->leader;
 
-                if ($leader) {
-                    if ($project_object->leader_type === 'App\Leader') {
-                        $leader->notify(new LeaderProjectHasNotEnoughParticipants());
-                        $leader->project_id = 0;
-                        $leader->save();
-                    } else {
-                        collect($project->assistant_student_leaders)->each(function ($item) use ($project_object) {
-                            $leader = (object) $item;
-                            $student = Student::findOrFail($leader->id);
-                            if ($leader->id == $project_object->leader_id) {
-                                $student->notify(new StudentProjectHasNotEnoughParticipants());
-                            } else {
-                                $student->notify(new AssistantProjectHasNotEnoughParticipants());
-                            }
-                        });
+                    if ($leader) {
+                        if ($project_object->leader_type === 'App\Leader') {
+                            $leader->notify(new LeaderProjectHasNotEnoughParticipants());
+                            $leader->project_id = 0;
+                            $leader->save();
+                        } else {
+                            collect($project->assistant_student_leaders)->each(function ($item) use ($project_object) {
+                                $leader = (object) $item;
+                                $student = Student::findOrFail($leader->id);
+                                if ($leader->id == $project_object->leader_id) {
+                                    $student->notify(new StudentProjectHasNotEnoughParticipants());
+                                } else {
+                                    $student->notify(new AssistantProjectHasNotEnoughParticipants());
+                                }
+                            });
+                        }
                     }
-                }
 
-                $messages = $project_object->messages();
+                    $messages = $project_object->messages();
 
-                if ($messages->exists()) {
-                    if ($messages->delete()) {
+                    if ($messages->exists()) {
+                        if ($messages->delete()) {
+                            if ($project_object->delete()) {
+                                if ($project_object->image != null && $project_object->image != '') {
+                                    Storage::delete('public/images/'. $project_object->image);
+                                }
+                            }
+                        }
+                    } else {
                         if ($project_object->delete()) {
                             if ($project_object->image != null && $project_object->image != '') {
                                 Storage::delete('public/images/'. $project_object->image);
                             }
-                        }
-                    }
-                } else {
-                    if ($project_object->delete()) {
-                        if ($project_object->image != null && $project_object->image != '') {
-                            Storage::delete('public/images/'. $project_object->image);
                         }
                     }
                 }
