@@ -1,4 +1,4 @@
-# diribitio - The backend
+# Diribitio - backend
 
 ## Hello!
 Welcome to my webapplication. Just take a look around!  
